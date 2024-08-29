@@ -2,14 +2,8 @@ import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class IUsersFindByIdDto {
+export class ITenantsGetByIdDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   id: string;
-}
-
-export class IUsersAssignByGroupIdDto extends IUsersFindByIdDto {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  groupId: string;
 }

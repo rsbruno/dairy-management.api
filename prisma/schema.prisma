@@ -7,10 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Tenant {
-  id           String @id @default(cuid())
-  clientId     String @unique
-  clientSecret String @unique
+model Occupations {
+  id      String    @id @default(cuid())
+  name    String    @unique
+  Persons Persons[]
+
+  @@map("occupations")
+}
+
+model Persons {
+  id            String      @id @default(cuid())
+  keycloakId    String      @unique
+  username      String      @unique
+  occupationId  Occupations @relation(fields: [occupationsId], references: [id])
+  occupationsId String
+  Tenant        Tenants?    @relation(fields: [tenantId], references: [id])
+  tenantId      String?
+
+  @@map("persons")
+}
+
+model Tenants {
+  id           String    @id @default(cuid())
+  clientId     String    @unique
+  clientSecret String    @unique
+  members      Persons[]
 
   @@map("tenants")
 }

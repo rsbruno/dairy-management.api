@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IPersonsGetDataDto } from '../../../persons/dto/get/model.dto';
 
 class IUsersGetAllAccessDto {
   @ApiProperty()

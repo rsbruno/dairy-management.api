@@ -1,15 +1,18 @@
+import { IOccupationsGetDataDto } from '@/domains/v1/administration/occupations/dto/get/model.dto';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class IUsersFindByIdDto {
+export class IPersonsCreateDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  id: string;
-}
+  keycloakId: string;
 
-export class IUsersAssignByGroupIdDto extends IUsersFindByIdDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  groupId: string;
+  username: string;
+
+  @ApiProperty({ type: IOccupationsGetDataDto })
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  occupation: IOccupationsGetDataDto;
 }
