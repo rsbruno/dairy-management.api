@@ -22,4 +22,5 @@ export const keycloakExceptions = {
   'connect ECONNREFUSED ::1:8080': 'não foi possível se conectar ao autenticador',
   'HTTP 404 Not Found': 'os recursos solicitados não foram encontrados!',
   'Request failed with status code 409': 'os dados inserido já podem ter sido cadastrados!',
+  'invalid_client': 'usuário não autorizado!',
 };

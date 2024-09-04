@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { TenantsRepository } from './tenants.repository';
+import { PersonsService } from '@/domains/v1/identity/persons/persons.service';
 import { ITenantsCreateDto } from './dto/body/model.dto';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
-import { UsersService } from '../../identity/users/users.service';
+import { TenantsRepository } from './tenants.repository';
+import { ITenantsGetDataDto } from './dto/get/model.dto';
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
+import { CustomBusinessException } from '@/exceptions/custom-business.exception';
+import { businessException } from '@/mappings/business-exception.mapping';
+import { IFarmsCreateDto } from '../farms/dto/body/model.dto';
 
 @Injectable()
 export class TenantsService {
   constructor(
     private readonly tenantsRepository: TenantsRepository,
-    private readonly usersService: UsersService,
+    private readonly personsService: PersonsService,
+    private readonly authConfigsService: AuthConfigsService,
   ) {}
 
-  async findAll(pagination: IOffsetPagination) {
+  private async findBy(where: Prisma.TenantsWhereInput) {
     try {
-      const repositoryResponse = await this.tenantsRepository.findAll(pagination);
-      const mapper = repositoryResponse.items.map((response) => ({
-        membersCount: response._count.members,
-        clientSecret: response.clientSecret,
-        clientId: response.id,
-        id: response.id,
-      }));
-      return { ...repositoryResponse, items: mapper };
+      const me = await this.authConfigsService.getMe();
+      const { members, ...respositoryResponse } = await this.tenantsRepository.findBy(where);
+      /*  if (!members.some((member) => member.id === me.id)) throw new CustomBusinessException('ATN100'); */
+      const data = await Promise.all(
+        members.map(async ({ keycloakId, id }) => {
+          const data = await this.personsService.keycloakFindById(keycloakId);
+          return { ...data, id };
+        }),
+      );
+      return { ...respositoryResponse, members: data } as ITenantsGetDataDto;
     } catch (error) {
       throw error;
     }
@@ -28,21 +36,35 @@ export class TenantsService {
 
   async findById(id: string) {
     try {
-      const respositoryResponse = await this.tenantsRepository.findById(id);
-      const members = await Promise.all(
-        respositoryResponse.members.map(
-          async (member) => await this.usersService.findById(member.keycloakId),
-        ),
-      );
-      return { ...respositoryResponse, members };
+      const respositoryResponse = await this.findBy({ id });
+      return respositoryResponse;
     } catch (error) {
       throw error;
     }
   }
 
-  async create(createTenantDto: ITenantsCreateDto) {
+  async findByClientId(clientId: string) {
     try {
-      return await this.tenantsRepository.create(createTenantDto);
+      const respositoryResponse = await this.findBy({ clientId });
+      return respositoryResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async assignPerson(clientId: string) {
+    try {
+      const respositoryResponse = await this.findBy({ clientId });
+      return respositoryResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async create(createTenantDto: IFarmsCreateDto) {
+    try {
+      const { id } = await this.tenantsRepository.create(createTenantDto);
+      return { createTenantDto, id };
     } catch (error) {
       throw error;
     }

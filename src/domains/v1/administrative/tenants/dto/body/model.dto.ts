@@ -1,9 +1,8 @@
-import { IPersonsCreateDto } from '@/domains/v1/identity/persons/dto/body/model.dto';
+import { IFarmsCreateDto } from '@/domains/v1/administrative/farms/dto/body/model.dto';
 import { IPersonsGetAllDto, IPersonsGetDataDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
-import { IUsersGetDataDto } from '@/domains/v1/identity/users/dto/get/model.dto';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class ITenantsCreateDto {
   @ApiProperty()
@@ -14,7 +13,11 @@ export class ITenantsCreateDto {
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   clientSecret: string;
 
-  @ApiProperty({ type: IPersonsGetAllDto, isArray: true })
+  @ApiProperty({ type: IFarmsCreateDto })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  members: Array<IPersonsGetAllDto>;
+  farm: IFarmsCreateDto;
+
+  @ApiProperty({ type: IPersonsGetDataDto, isArray: true })
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  members: Array<IPersonsGetDataDto>;
 }

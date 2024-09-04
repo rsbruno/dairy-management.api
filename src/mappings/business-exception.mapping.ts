@@ -1,7 +1,5 @@
-export const businessException = {
-  AGR100: 'grupos primários não podem ser associados!',
-  AGR101: 'usuários não podem ficar sem nenhum grupo associado!',
-  AGR102: 'o grupo buscado não foi encontrado!',
+import { HttpStatus } from '@nestjs/common';
 
-  ARL100: 'nenhuma role foi encontrada!',
+export const businessException = {
+  ATN100: { message: 'usuário sem acesso ao cliente!', statusCode: HttpStatus.FORBIDDEN },
 };

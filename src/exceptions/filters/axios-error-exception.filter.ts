@@ -27,7 +27,7 @@ export class AxiosErrorExceptionFilter implements ExceptionFilter {
         break;
     }
     this.logger.error({
-      messageException: exception.message,
+      messageException: `${exception.message} | ${error}`,
       messageClient,
       method,
       url,

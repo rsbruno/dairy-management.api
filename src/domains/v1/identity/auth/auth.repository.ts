@@ -7,15 +7,20 @@ import { lastValueFrom } from 'rxjs';
 export class AuthRepository {
   constructor(private http: HttpService) {}
 
-  async siginWithKeycloakCredentials(username: string, password: string) {
+  async siginWithKeycloakCredentials(
+    username: string,
+    password: string,
+    clientId: string,
+    clientSecret: string,
+  ) {
     try {
       return await lastValueFrom(
         this.http.post<IAuthAccessGetDto>(
           `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
           new URLSearchParams({
-            client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
-            client_id: process.env.KEYCLOAK_CLIENT_ID,
+            client_secret: clientSecret,
             grant_type: 'password',
+            client_id: clientId,
             username,
             password,
           }),

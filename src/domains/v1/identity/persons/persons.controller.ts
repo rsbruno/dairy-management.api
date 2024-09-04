@@ -1,14 +1,14 @@
 import { ApiDocMethodPaginated } from '@/decorators/swagger/api-doc-method-paginated.decorator';
-import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
+import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
+import { IPersonsFindByIdDto } from './dto/param/model.dto';
+import { IPersonsCreateDto } from './dto/body/model.dto';
 import { IPersonsGetDataDto } from './dto/get/model.dto';
 import { PersonsService } from './persons.service';
 import { ApiTags } from '@nestjs/swagger';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
-import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
-import { IPersonsFindByIdDto } from './dto/param/model.dto';
-import { IPersonsCreateDto } from './dto/body/model.dto';
-import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
 
 @ApiTags('Persons')
 @Controller('v1/persons')
@@ -18,7 +18,7 @@ export class PersonsController {
 
   @Get()
   @ApiDocMethodPaginated({
-    description: '',
+    description: 'Lista todos as pessoas cadastradas em uma fazenda',
     responseModel: IPersonsGetDataDto,
   })
   async findAll(@Query() query: IOffsetPagination) {
@@ -27,7 +27,7 @@ export class PersonsController {
 
   @Get(':id')
   @ApiDocMethodGet({
-    description: '',
+    description: 'Busca uma pessoa pelo id',
     responseModel: IPersonsGetDataDto,
   })
   async findById(@Param() params: IPersonsFindByIdDto) {
@@ -36,7 +36,7 @@ export class PersonsController {
 
   @Post()
   @ApiDocMethodPost({
-    description: '',
+    description: 'Adiciona uma nova pessoa na fazenda atual logada',
     responseModel: IPersonsCreateDto,
   })
   async create(@Body() createPersonDto: IPersonsCreateDto) {

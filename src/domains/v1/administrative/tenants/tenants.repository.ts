@@ -1,63 +1,77 @@
 import { PrismaService } from '@/configs/database/prisma.service';
 import { ITenantsCreateDto } from './dto/body/model.dto';
+import { ITenantsGetAllDto } from './dto/get/model.dto';
 import { Injectable } from '@nestjs/common';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { Prisma } from '@prisma/client';
+import { IFarmsCreateDto } from '../farms/dto/body/model.dto';
 
 @Injectable()
 export class TenantsRepository {
+  private selectProps = {
+    clientSecret: true,
+    clientId: true,
+    id: true,
+    farm: {
+      select: {
+        name: true,
+        cnpj: true,
+        id: true,
+      },
+    },
+    members: {
+      select: {
+        id: true,
+        keycloakId: true,
+      },
+    },
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(pagination: IOffsetPagination) {
+  async findAll(): Promise<ITenantsGetAllDto> {
     try {
-      const paginateService = new IOffsetPagination<Array<any>>(this.prisma, pagination);
-      const response = await paginateService.paginate('Tenants', {
+      const response = await this.prisma.tenants.findMany({
         select: {
-          id: true,
           clientId: true,
-          clientSecret: true,
-          _count: {
-            select: {
-              members: true,
-            },
-          },
-        },
-      });
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findById(id: string) {
-    try {
-      const response = await this.prisma.tenants.findFirstOrThrow({
-        where: { id },
-        select: {
-          id: true,
-          clientId: true,
-          clientSecret: true,
           members: {
             select: {
-              id: true,
-              keycloakId: true,
+              username: true,
             },
           },
         },
       });
-      return response;
+      return response as unknown as ITenantsGetAllDto;
     } catch (error) {
       throw error;
     }
   }
 
-  async create(createTenantDto: ITenantsCreateDto) {
+  async findBy(where: Prisma.TenantsWhereInput): Promise<ITenantsGetAllDto> {
+    try {
+      const response = await this.prisma.tenants.findFirstOrThrow({
+        select: this.selectProps,
+        where,
+      });
+      return response as unknown as ITenantsGetAllDto;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async create(createTenantDto: IFarmsCreateDto) {
     try {
       const response = await this.prisma.tenants.create({
         data: {
           clientId: createTenantDto.clientId,
           clientSecret: createTenantDto.clientSecret,
+          farm: {
+            create: {
+              cnpj: createTenantDto.cnpj,
+              name: createTenantDto.name,
+            },
+          },
           members: {
-            connect: createTenantDto.members.map((member) => ({ keycloakId: member.keycloakId })),
+            connect: createTenantDto.members.map((member) => ({ id: member.personId })),
           },
         },
       });

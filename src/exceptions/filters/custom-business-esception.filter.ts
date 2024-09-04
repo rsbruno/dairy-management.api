@@ -12,16 +12,16 @@ export class CustomBusinessExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const { method, url } = request;
-    const message = businessException[exception.code];
+    const { message, statusCode } = businessException[exception.code];
     this.logger.error({
       messageException: message,
       messageClient: message,
       method,
       url,
     });
-    response.status(HttpStatus.BAD_REQUEST).json({
+    response.status(statusCode ?? HttpStatus.BAD_REQUEST).json({
       errors: [{ message }],
-      statusCode: HttpStatus.BAD_REQUEST,
+      statusCode: statusCode ?? HttpStatus.BAD_REQUEST,
     });
   }
 }

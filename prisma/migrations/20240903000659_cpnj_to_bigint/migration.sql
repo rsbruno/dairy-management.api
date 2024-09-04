@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "farms" ALTER COLUMN "cnpj" SET DATA TYPE BIGINT;

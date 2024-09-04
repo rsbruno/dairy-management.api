@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { TenantsService } from './tenants.service';
-import { TenantsController } from './tenants.controller';
+import { AuthConfigsModule } from '@/configs/auth-configs/auth-configs.module';
+import { PersonsModule } from '@/domains/v1/identity/persons/persons.module';
 import { TenantsRepository } from './tenants.repository';
-import { UsersModule } from '../../identity/users/users.module';
+import { TenantsService } from './tenants.service';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [TenantsController],
+  imports: [AuthConfigsModule, PersonsModule],
   providers: [TenantsService, TenantsRepository],
+  exports: [TenantsService, TenantsRepository],
 })
 export class TenantsModule {}

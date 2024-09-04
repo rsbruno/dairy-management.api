@@ -12,6 +12,7 @@ export const commonExceptions = {
   },
   param: {
     isNotEmpty: 'o parâmetro é obrigatório!',
+    isNotCNPJ: 'o CPNJ fornecido não é válido!',
     isNumber: 'o parâmetro deve ser um número!',
     isString: 'o parâmetro deve ser uma string!',
     isMinValue: {

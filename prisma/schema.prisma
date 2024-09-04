@@ -8,30 +8,38 @@ datasource db {
 }
 
 model Occupations {
-  id      String    @id @default(cuid())
-  name    String    @unique
-  Persons Persons[]
+  id   String @id @default(cuid())
+  name String @unique
 
   @@map("occupations")
 }
 
 model Persons {
-  id            String      @id @default(cuid())
-  keycloakId    String      @unique
-  username      String      @unique
-  occupationId  Occupations @relation(fields: [occupationsId], references: [id])
-  occupationsId String
-  Tenant        Tenants?    @relation(fields: [tenantId], references: [id])
-  tenantId      String?
+  id         String             @id @default(cuid())
+  keycloakId String             @unique
+  username   String             @unique
+  tenants    Tenants[]
 
   @@map("persons")
 }
 
 model Tenants {
-  id           String    @id @default(cuid())
-  clientId     String    @unique
-  clientSecret String    @unique
+  id           String             @id @default(cuid())
+  clientId     String             @unique
+  clientSecret String             @unique
+  farm         Farms              @relation(fields: [farmsId], references: [id])
+  farmsId      String             @unique
   members      Persons[]
 
   @@map("tenants")
+}
+
+
+model Farms {
+  id      String   @id @default(cuid())
+  name    String
+  cnpj    String   @unique
+  Tenants Tenants?
+
+  @@map("farms")
 }
