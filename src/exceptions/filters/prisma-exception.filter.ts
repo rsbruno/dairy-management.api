@@ -12,7 +12,10 @@ export class PrismaClientKnownRequestExceptionFilter implements ExceptionFilter 
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const { method, url } = request;
-    const message = prismaExceptions.code[exception.code] ?? prismaExceptions.code.default;
+    const message =
+      prismaExceptions.code[exception.message] ??
+      prismaExceptions.code[exception.code] ??
+      prismaExceptions.code.default;
     this.logger.error({
       prismaCode: exception.code,
       messageException: exception.message,

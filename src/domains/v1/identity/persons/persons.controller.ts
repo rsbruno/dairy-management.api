@@ -36,7 +36,7 @@ export class PersonsController {
 
   @Post()
   @ApiDocMethodPost({
-    description: 'Adiciona uma nova pessoa na fazenda atual logada',
+    description: 'Adiciona uma nova pessoa no sistema',
     responseModel: IPersonsCreateDto,
   })
   async create(@Body() createPersonDto: IPersonsCreateDto) {

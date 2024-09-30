@@ -1,14 +1,15 @@
 import { TenantsRepository } from '@/domains/v1/administrative/tenants/tenants.repository';
 import { IAuthAccessGetDto, IAuthRefreshGetDto } from './dto/get/model.dto';
-import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtStrategyService } from '@/configs/jwt/jwt.service';
 import { AuthRepository } from './auth.repository';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly tenantsRepository: TenantsRepository,
+    private readonly jwtStrategyService: JwtStrategyService,
   ) {}
 
   async siginWithKeycloakCredentials(username: string, password: string): Promise<IAuthAccessGetDto> {
@@ -27,18 +28,14 @@ export class AuthService {
 
   async resfreshKeycloakToken(refreshToken: string): Promise<IAuthRefreshGetDto> {
     try {
+      const token = this.jwtStrategyService.decodeToken(refreshToken);
+      const { clientId, clientSecret } = await this.tenantsRepository.findBy({
+        clientId: token.payload.azp,
+      });
       const {
         data: { access_token },
-      } = await this.authRepository.resfreshKeycloakToken(refreshToken);
+      } = await this.authRepository.resfreshKeycloakToken(refreshToken, clientId, clientSecret);
       return { access_token } as IAuthRefreshGetDto;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async logoutToken(refreshToken: string) {
-    try {
-      return await this.authRepository.logoutToken(refreshToken);
     } catch (error) {
       throw error;
     }

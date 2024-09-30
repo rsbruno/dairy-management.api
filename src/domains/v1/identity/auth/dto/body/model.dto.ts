@@ -1,12 +1,11 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { IsEmail, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class IAuthSigninBodyDto {
   @ApiProperty({
     example: 'johndoe@email.com',
   })
-  @IsEmail({}, { message: commonExceptions.validator.isEmail })
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
   username: string;
 

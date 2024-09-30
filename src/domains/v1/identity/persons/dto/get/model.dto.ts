@@ -1,4 +1,3 @@
-import { IOccupationsGetDataDto } from '@/domains/v1/administration/occupations/dto/get/model.dto';
 import { IKeycloakPaginationGetDto } from '@/models/pagination/keycloak/model';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
@@ -113,7 +112,4 @@ export class IPersonsGetAllDto {
 
   @ApiProperty()
   username: string;
-
-  @ApiProperty({ type: IOccupationsGetDataDto })
-  occupationId: IOccupationsGetDataDto;
 }

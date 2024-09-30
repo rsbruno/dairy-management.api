@@ -1,9 +1,10 @@
 import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
-import { IPersonsGetAllDto, IPersonsGetDataDto, IUsersGetAllDto } from './dto/get/model.dto';
 import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
+import { IPersonsGetDataDto, IUsersGetAllDto } from './dto/get/model.dto';
 import { IPersonsCreateDto } from './dto/body/model.dto';
 import { PersonsRepository } from './persons.repository';
 import { Injectable } from '@nestjs/common';
+import { CustomBusinessException } from '@/exceptions/custom-business.exception';
 
 @Injectable()
 export class PersonsService {
@@ -55,7 +56,7 @@ export class PersonsService {
 
   async create(createPersonDto: IPersonsCreateDto): Promise<IPersonsCreateDto> {
     try {
-      const person = await this.personsRepository.create(createPersonDto);
+      await this.personsRepository.create(createPersonDto);
       return createPersonDto;
     } catch (error) {
       throw error;

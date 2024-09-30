@@ -79,9 +79,9 @@ export class PersonsRepository {
         const { id } = await prisma.persons.create({
           data: {
             keycloakId: '',
-            username: createPersonDto.username,
+            username: createPersonDto.email,
             tenants: {
-              connect: createPersonDto.farm.map((farm) => ({
+              connect: createPersonDto.farms.map((farm) => ({
                 farmsId: farm.id,
               })),
             },
@@ -132,7 +132,7 @@ export class PersonsRepository {
       const createUser = createUserTemplatePayload({
         firstName: createPersonDto.firstname,
         lastName: createPersonDto.lastname,
-        email: createPersonDto.username,
+        email: createPersonDto.email,
       });
       await lastValueFrom(
         this.http.post(
@@ -141,7 +141,7 @@ export class PersonsRepository {
           new IHeadersGetDto(this.request).getConfigs(),
         ),
       );
-      const { data } = await this.findallUsers({ search: createPersonDto.username, first: 0, max: 1 });
+      const { data } = await this.findallUsers({ search: createPersonDto.email, first: 0, max: 1 });
       return data;
     } catch (error) {
       throw error;

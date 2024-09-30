@@ -1,6 +1,6 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
+import { ArrayMinSize, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
 
 class IPersonsCreateFarmDto {
   @ApiProperty()
@@ -11,7 +11,7 @@ class IPersonsCreateFarmDto {
 export class IPersonsCreateDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
-  username: string;
+  email: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
@@ -23,5 +23,6 @@ export class IPersonsCreateDto {
 
   @ApiProperty({ type: IPersonsCreateFarmDto, isArray: true })
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
-  farm: Array<IPersonsCreateFarmDto>;
+  @ArrayMinSize(1, { message: commonExceptions.validator.isArray.min.one })
+  farms: Array<IPersonsCreateFarmDto>;
 }

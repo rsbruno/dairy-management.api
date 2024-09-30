@@ -7,7 +7,9 @@ export const commonExceptions = {
     isNumber: 'o campo deve ser um número!',
     isString: 'o campo deve ser uma string!',
     isArray: {
-      one: 'necessário no mínimo 1 elemento!',
+      min: {
+        one: 'necessário no mínimo 1 entidade associada!',
+      },
     },
   },
   param: {

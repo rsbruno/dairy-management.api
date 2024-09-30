@@ -8,6 +8,7 @@ import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service'
 import { CustomBusinessException } from '@/exceptions/custom-business.exception';
 import { businessException } from '@/mappings/business-exception.mapping';
 import { IFarmsCreateDto } from '../farms/dto/body/model.dto';
+import { createClientTemplatePayload } from '@/utils/keycloak-scaffold/create-client-palyload';
 
 @Injectable()
 export class TenantsService {
@@ -65,6 +66,18 @@ export class TenantsService {
     try {
       const { id } = await this.tenantsRepository.create(createTenantDto);
       return { createTenantDto, id };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async keycloakCreateClient(createClientDto: { name: string }) {
+    try {
+      const createTenantDto = createClientTemplatePayload({
+        name: createClientDto.name,
+      });
+      await this.tenantsRepository.keycloakCreateClient(createTenantDto);
+      return { clientId: createTenantDto.clientId, clientSecret: createTenantDto.secret };
     } catch (error) {
       throw error;
     }

@@ -1,7 +1,7 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { IsCNPJ } from '@/decorators/validators/is-CNPJ.decorator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { ArrayMinSize, IsNotEmpty } from 'class-validator';
 
 class IFarmsMembersCreateDto {
   @ApiProperty()
@@ -29,5 +29,6 @@ export class IFarmsCreateDto {
 
   @ApiProperty({ type: IFarmsMembersCreateDto, isArray: true })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @ArrayMinSize(1, { message: commonExceptions.validator.isArray.min.one })
   members: Array<IFarmsMembersCreateDto>;
 }

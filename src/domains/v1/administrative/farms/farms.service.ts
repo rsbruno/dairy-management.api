@@ -26,9 +26,11 @@ export class FarmsService {
           },
         },
       });
-      const items = repositoryResponse.items.map((farm) =>
-        IFarmsGetAllDto.toIFarmsGetDataDto(farm),
-      ) as unknown as Array<IFarmsGetDataDto>;
+      const items = await Promise.all(
+        repositoryResponse.items.map(
+          async (farm) => await this.findById(farm.id),
+        ) as unknown as Array<IFarmsGetDataDto>,
+      );
       return { ...repositoryResponse, items } as IOffsetPaginationResponse<Array<IFarmsGetDataDto>>;
     } catch (error) {
       throw error;

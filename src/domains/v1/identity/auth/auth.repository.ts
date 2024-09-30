@@ -31,33 +31,16 @@ export class AuthRepository {
     }
   }
 
-  async resfreshKeycloakToken(refreshToken: string) {
+  async resfreshKeycloakToken(refreshToken: string, clientId: string, clientSecret: string) {
     try {
       return await lastValueFrom(
         this.http.post<IAuthRefreshGetDto>(
           `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
           new URLSearchParams({
-            client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
-            client_id: process.env.KEYCLOAK_CLIENT_ID,
             refresh_token: refreshToken,
+            client_secret: clientSecret,
             grant_type: 'refresh_token',
-          }),
-        ),
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async logoutToken(refreshToken: string) {
-    try {
-      return await lastValueFrom(
-        this.http.post(
-          `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/logout`,
-          new URLSearchParams({
-            client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
-            client_id: process.env.KEYCLOAK_CLIENT_ID,
-            refresh_token: refreshToken,
+            client_id: clientId,
           }),
         ),
       );

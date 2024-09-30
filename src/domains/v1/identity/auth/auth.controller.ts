@@ -1,12 +1,12 @@
-import { HttpStatus, Controller, HttpCode, Delete, Body, Post, Put } from '@nestjs/common';
-import { ApiDocMethodDelete } from '@/decorators/swagger/api-doc-method-delete.decorator';
-import { IAuthLogoutParamDto, IAuthRefreshTokenParamDto } from './dto/params/model.dto';
 import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
 import { IAuthAccessGetDto, IAuthRefreshGetDto } from './dto/get/model.dto';
+import { IAuthRefreshTokenParamDto } from './dto/params/model.dto';
+import { Controller, Body, Post, Put, UseGuards } from '@nestjs/common';
 import { IAuthSigninBodyDto } from './dto/body/model.dto';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
 
 @ApiTags('Auth')
 @Controller('v1/auth')
@@ -27,19 +27,9 @@ export class AuthController {
   @ApiDocMethodGet({
     responseModel: IAuthRefreshGetDto,
     description: 'Autualiza token do usuário já logado',
-    isPublic: true,
   })
+  @UseGuards(AuthenticationGuard)
   refreshToken(@Body() { refresh_token }: IAuthRefreshTokenParamDto) {
     return this.authService.resfreshKeycloakToken(refresh_token);
-  }
-
-  @Delete()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiDocMethodDelete({
-    description: 'Faz logout do usuário',
-    isPublic: true,
-  })
-  logout(@Body() { refresh_token }: IAuthLogoutParamDto) {
-    return this.authService.logoutToken(refresh_token);
   }
 }
