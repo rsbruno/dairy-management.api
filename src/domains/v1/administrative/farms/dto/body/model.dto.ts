@@ -1,7 +1,7 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { IsCNPJ } from '@/decorators/validators/is-CNPJ.decorator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsCNPJ } from '@/decorators/validators/is-cnpj.decorator';
 import { ArrayMinSize, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 class IFarmsMembersCreateDto {
   @ApiProperty()

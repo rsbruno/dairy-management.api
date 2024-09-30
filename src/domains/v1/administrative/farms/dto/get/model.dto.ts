@@ -1,9 +1,8 @@
 import { IPersonsGetDataDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { IsCNPJ } from '@/decorators/validators/is-CNPJ.decorator';
+import { IsCNPJ } from '@/decorators/validators/is-cnpj.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { PersonsService } from '@/domains/v1/identity/persons/persons.service';
 
 export class IFarmsGetDataDto {
   @ApiProperty()
