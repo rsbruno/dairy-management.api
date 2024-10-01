@@ -8,9 +8,10 @@ export class AuthenticationGuard extends AuthGuard('jwt') implements CanActivate
     super();
   }
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest();
+    console.log('passei');
+   /*  const request = context.switchToHttp().getRequest();
     const token = request.headers['authorization']?.split(' ')[1];
-    if (!token) throw new UnauthorizedException(commonExceptions.http.unauthorized);
+    if (!token) throw new UnauthorizedException(commonExceptions.http.unauthorized); */
     return true;
   }
 }

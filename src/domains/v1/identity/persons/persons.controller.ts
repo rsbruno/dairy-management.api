@@ -4,7 +4,10 @@ import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/co
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
 import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
+import { AuthorizationGuard } from '@/guards/auth/authorization.guard';
+import { roles } from '@/configs/mapping-roles/index.roles';
 import { IPersonsFindByIdDto } from './dto/param/model.dto';
+import { Roles } from '@/decorators/roles/roles.decorator';
 import { IPersonsCreateDto } from './dto/body/model.dto';
 import { IPersonsGetDataDto } from './dto/get/model.dto';
 import { PersonsService } from './persons.service';
@@ -12,13 +15,14 @@ import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Persons')
 @Controller('v1/persons')
-@UseGuards(AuthenticationGuard)
+@UseGuards(AuthenticationGuard, AuthorizationGuard)
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
 
   @Get()
+  @Roles(roles.identity.persons.findall.name)
   @ApiDocMethodPaginated({
-    description: 'Lista todos as pessoas cadastradas em uma fazenda',
+    description: roles.identity.persons.findall.description,
     responseModel: IPersonsGetDataDto,
   })
   async findAll(@Query() query: IOffsetPagination) {
@@ -26,8 +30,9 @@ export class PersonsController {
   }
 
   @Get(':id')
+  @Roles(roles.identity.persons.findbyid.name)
   @ApiDocMethodGet({
-    description: 'Busca uma pessoa pelo id',
+    description: roles.identity.persons.findbyid.description,
     responseModel: IPersonsGetDataDto,
   })
   async findById(@Param() params: IPersonsFindByIdDto) {
@@ -35,8 +40,9 @@ export class PersonsController {
   }
 
   @Post()
+  @Roles(roles.identity.persons.create.name)
   @ApiDocMethodPost({
-    description: 'Adiciona uma nova pessoa no sistema',
+    description: roles.identity.persons.create.description,
     responseModel: IPersonsCreateDto,
   })
   async create(@Body() createPersonDto: IPersonsCreateDto) {

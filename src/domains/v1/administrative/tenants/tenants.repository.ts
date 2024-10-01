@@ -1,17 +1,23 @@
+import { IFarmsClientPayloadProps } from '@/utils/keycloak-scaffold/create-client-palyload';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { ITenantsCreateDto } from './dto/body/model.dto';
+import { IFarmsCreateDto } from '../farms/dto/body/model.dto';
+import { IHeadersGetDto } from '@/models/headers/model.dto';
 import { ITenantsGetAllDto } from './dto/get/model.dto';
 import { Inject, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { IFarmsCreateDto } from '../farms/dto/body/model.dto';
-import { lastValueFrom } from 'rxjs';
-import { REQUEST } from '@nestjs/core';
 import { HttpService } from '@nestjs/axios';
-import { IHeadersGetDto } from '@/models/headers/model.dto';
-import { IFarmsClientPayloadProps } from '@/utils/keycloak-scaffold/create-client-palyload';
+import { Prisma } from '@prisma/client';
+import { REQUEST } from '@nestjs/core';
+import { lastValueFrom } from 'rxjs';
+import { generateStringSlug } from '@/utils/generate-string-slug';
 
 @Injectable()
 export class TenantsRepository {
+  constructor(
+    @Inject(REQUEST) private readonly request: Request,
+    private readonly prisma: PrismaService,
+    private readonly http: HttpService,
+  ) {}
+
   private selectProps = {
     clientSecret: true,
     clientId: true,
@@ -30,12 +36,6 @@ export class TenantsRepository {
       },
     },
   };
-
-  constructor(
-    @Inject(REQUEST) private readonly request: Request,
-    private readonly prisma: PrismaService,
-    private readonly http: HttpService,
-  ) {}
 
   async findAll(): Promise<ITenantsGetAllDto> {
     try {
@@ -71,8 +71,8 @@ export class TenantsRepository {
     try {
       const response = await this.prisma.tenants.create({
         data: {
-          clientId: createTenantDto.clientId,
-          clientSecret: createTenantDto.clientSecret,
+          clientId: generateStringSlug(createTenantDto.name),
+          clientSecret: "",
           farm: {
             create: {
               cnpj: createTenantDto.cnpj,

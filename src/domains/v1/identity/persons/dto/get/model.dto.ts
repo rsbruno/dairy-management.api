@@ -113,3 +113,33 @@ export class IPersonsGetAllDto {
   @ApiProperty()
   username: string;
 }
+
+export class IPersonsGroupsGetAllDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  path: string;
+
+  @ApiProperty()
+  @IsOptional()
+  parentId: string;
+}
+
+export class IPersonsRolesGetAllDto {
+  realmMappings: Array<IPersonsRolesGetDataDto>;
+}
+
+export class IPersonsRolesGetDataDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  description: string;
+}

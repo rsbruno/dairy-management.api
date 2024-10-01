@@ -2,11 +2,10 @@ import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decor
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
 import { IAuthAccessGetDto, IAuthRefreshGetDto } from './dto/get/model.dto';
 import { IAuthRefreshTokenParamDto } from './dto/params/model.dto';
-import { Controller, Body, Post, Put, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Put } from '@nestjs/common';
 import { IAuthSigninBodyDto } from './dto/body/model.dto';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
 
 @ApiTags('Auth')
 @Controller('v1/auth')
@@ -25,10 +24,10 @@ export class AuthController {
 
   @Put()
   @ApiDocMethodGet({
-    responseModel: IAuthRefreshGetDto,
     description: 'Autualiza token do usuário já logado',
+    responseModel: IAuthRefreshGetDto,
+    isPublic: true,
   })
-  @UseGuards(AuthenticationGuard)
   refreshToken(@Body() { refresh_token }: IAuthRefreshTokenParamDto) {
     return this.authService.resfreshKeycloakToken(refresh_token);
   }

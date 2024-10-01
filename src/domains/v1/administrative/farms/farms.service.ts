@@ -1,11 +1,11 @@
 import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
 import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
-import { IFarmsCreateDto } from './dto/body/model.dto';
-import { TenantsService } from '../tenants/tenants.service';
-import { FarmsRepository } from './farms.repository';
-import { Injectable } from '@nestjs/common';
 import { IFarmsGetAllDto, IFarmsGetDataDto } from './dto/get/model.dto';
 import { PersonsService } from '../../identity/persons/persons.service';
+import { TenantsService } from '../tenants/tenants.service';
+import { IFarmsCreateDto } from './dto/body/model.dto';
+import { FarmsRepository } from './farms.repository';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FarmsService {
@@ -51,7 +51,10 @@ export class FarmsService {
 
   async create(createFarmDto: IFarmsCreateDto) {
     try {
-      return this.tenantsService.create(createFarmDto);
+      console.log(createFarmDto);
+      return "teste"
+
+      /* const tenant = await this.tenantsService.create(createFarmDto); */
     } catch (error) {
       throw error;
     }

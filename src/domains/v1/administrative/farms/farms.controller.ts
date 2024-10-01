@@ -15,7 +15,7 @@ import { IFarmsFindByIdDto } from './dto/param/model.dto';
 export class FarmsController {
   constructor(private readonly farmsService: FarmsService) {}
 
-  @Get()
+  /* @Get()
   @ApiDocMethodPaginated({
     description: 'Lista todas as fazendas do usuário logado.',
     responseModel: IFarmsGetDataDto,
@@ -31,14 +31,15 @@ export class FarmsController {
   })
   findById(@Param() params: IFarmsFindByIdDto) {
     return this.farmsService.findById(params.id);
-  }
+  } */
 
   @Post()
   @ApiDocMethodPost({
     description: 'Adiciona uma nova fazenda no sistema.',
     responseModel: IFarmsCreateDto,
+    isPublic: true,
   })
   create(@Body() createFarmDto: IFarmsCreateDto) {
-    return this.farmsService.create(createFarmDto);
+    return 'this.farmsService.create(createFarmDto)';
   }
 }

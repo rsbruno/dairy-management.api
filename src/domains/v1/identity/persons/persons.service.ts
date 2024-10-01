@@ -1,16 +1,17 @@
 import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
 import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
+import { KeycloakUserService } from '@/keycloak/users/keycloak-user.service';
 import { IPersonsGetDataDto, IUsersGetAllDto } from './dto/get/model.dto';
 import { IPersonsCreateDto } from './dto/body/model.dto';
 import { PersonsRepository } from './persons.repository';
 import { Injectable } from '@nestjs/common';
-import { CustomBusinessException } from '@/exceptions/custom-business.exception';
 
 @Injectable()
 export class PersonsService {
   constructor(
     private readonly personsRepository: PersonsRepository,
     private readonly authConfigsService: AuthConfigsService,
+    private readonly keycloakUserService: KeycloakUserService,
   ) {}
 
   async findAll(
@@ -36,19 +37,9 @@ export class PersonsService {
 
   async findById(id: string): Promise<IPersonsGetDataDto> {
     try {
-      const { keycloakId } = await this.personsRepository.findById(id);
-      const { data } = await this.personsRepository.keycloakfindById(keycloakId);
-      return { ...IUsersGetAllDto.toIPersonsGetDataDto(data), id } as IPersonsGetDataDto;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByKeycloakId(keycloakId: string): Promise<IPersonsGetDataDto> {
-    try {
-      const person = await this.personsRepository.findBy({ keycloakId });
-      const { data } = await this.personsRepository.keycloakfindById(keycloakId);
-      return { ...IUsersGetAllDto.toIPersonsGetDataDto(data), id: person.id } as IPersonsGetDataDto;
+      const person = await this.personsRepository.findBy({ id });
+      const user = await this.keycloakUserService.findById(person.keycloakId);
+      return { ...IUsersGetAllDto.toIPersonsGetDataDto(user), id: person.id } as IPersonsGetDataDto;
     } catch (error) {
       throw error;
     }
@@ -58,15 +49,6 @@ export class PersonsService {
     try {
       await this.personsRepository.create(createPersonDto);
       return createPersonDto;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async keycloakFindById(id: string): Promise<IPersonsGetDataDto> {
-    try {
-      const { data } = await this.personsRepository.keycloakfindById(id);
-      return IUsersGetAllDto.toIPersonsGetDataDto(data);
     } catch (error) {
       throw error;
     }
