@@ -15,10 +15,6 @@ export class IFarmsGetDataDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  clientSecret: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   name: string;
 
   @ApiProperty()
@@ -53,7 +49,6 @@ export class IFarmsGetAllDto {
   public static toIFarmsGetDataDto(data: IFarmsGetAllDto) {
     return {
       clientId: data.Tenants.clientId,
-      clientSecret: data.Tenants.clientSecret,
       cnpj: data.cnpj,
       name: data.name,
       id: data.id,

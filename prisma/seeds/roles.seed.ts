@@ -18,7 +18,7 @@ function getRolesAsArray(obj: Record<string, any>): { name: string; description:
   return result;
 }
 
-export async function seedRoles() {
+async function seedRoles() {
   console.info('Criando roles...');
   try {
     const http = new HttpService();
@@ -28,9 +28,9 @@ export async function seedRoles() {
       http.post<IAuthAccessGetDto>(
         `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
         new URLSearchParams({
-          client_secret: 'plqloTgDksDCELs4oCGN5aGW9TFhsTpv',
+          client_secret: 'khtMLYJ3SmKCaI41aEDaQcAom12aGUAm',
           username: 'johndoe@email.com',
-          client_id: 'erp-client-dev',
+          client_id: 'erp-milk-client',
           grant_type: 'password',
           password: '123456',
         }),
@@ -53,3 +53,5 @@ export async function seedRoles() {
   }
   console.info('Pronto!');
 }
+
+seedRoles();

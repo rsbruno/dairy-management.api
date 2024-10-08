@@ -1,23 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { FarmsService } from './farms.service';
-import { IFarmsCreateDto } from './dto/body/model.dto';
-import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
-import { ApiTags } from '@nestjs/swagger';
 import { ApiDocMethodPaginated } from '@/decorators/swagger/api-doc-method-paginated.decorator';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
-import { ITenantsCreateDto } from '../tenants/dto/body/model.dto';
-import { IFarmsGetDataDto } from './dto/get/model.dto';
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
+import { AuthorizationGuard } from '@/guards/auth/authorization.guard';
+import { roles } from '@/configs/mapping-roles/index.roles';
+import { Roles } from '@/decorators/roles/roles.decorator';
 import { IFarmsFindByIdDto } from './dto/param/model.dto';
+import { IFarmsGetDataDto } from './dto/get/model.dto';
+import { FarmsService } from './farms.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('farms')
 @ApiTags('Farms')
+@UseGuards(AuthenticationGuard, AuthorizationGuard)
 export class FarmsController {
   constructor(private readonly farmsService: FarmsService) {}
 
-  /* @Get()
+  @Get()
+  @Roles(roles.administrative.farms.findall.name)
   @ApiDocMethodPaginated({
-    description: 'Lista todas as fazendas do usuário logado.',
+    description: roles.administrative.farms.findall.description,
     responseModel: IFarmsGetDataDto,
   })
   async findAll(@Query() query: IOffsetPagination) {
@@ -25,21 +28,12 @@ export class FarmsController {
   }
 
   @Get(':id')
+  @Roles(roles.administrative.farms.findbyid.name)
   @ApiDocMethodGet({
-    description: 'Lista todas as fazendas do usuário logado.',
+    description: roles.administrative.farms.findbyid.description,
     responseModel: IFarmsGetDataDto,
   })
   findById(@Param() params: IFarmsFindByIdDto) {
     return this.farmsService.findById(params.id);
-  } */
-
-  @Post()
-  @ApiDocMethodPost({
-    description: 'Adiciona uma nova fazenda no sistema.',
-    responseModel: IFarmsCreateDto,
-    isPublic: true,
-  })
-  create(@Body() createFarmDto: IFarmsCreateDto) {
-    return 'this.farmsService.create(createFarmDto)';
   }
 }

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function seedFarms() {
+async function farmsSeed() {
   console.info('Criando Fazenda, Tenant e Usuário...');
   await prisma.tenants.create({
     data: {
@@ -10,16 +10,17 @@ export async function seedFarms() {
       farm: {
         create: {
           cnpj: '09299478000139',
-          name: 'Fazenda Gestão de Leite',
+          name: 'Fazenda Palmeira alta',
         },
       },
       members: {
         create: {
           username: 'johndoe@email.com',
-          keycloakId: '2c362e56-6db0-44cb-aab6-cd81b8050dd5',
+          keycloakId: '',
         },
       },
     },
   });
   console.info('Pronto!');
 }
+farmsSeed();

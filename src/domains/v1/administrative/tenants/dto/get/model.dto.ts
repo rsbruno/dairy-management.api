@@ -1,8 +1,6 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { IPersonsGetDataDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
-import { IFarmsGetAllDto } from '../../../farms/dto/get/model.dto';
 
 class ITenantsMembersGetAllDto {
   @ApiProperty()
@@ -27,9 +25,9 @@ export class ITenantsGetAllDto {
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   id: string;
 
-  @ApiProperty({ type: IFarmsGetAllDto })
+  /*   @ApiProperty({ type: IFarmsGetAllDto })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  farm: IFarmsGetAllDto;
+  farm: IFarmsGetAllDto; */
 
   @ApiProperty({ type: ITenantsMembersGetAllDto, isArray: true })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
@@ -49,13 +47,13 @@ export class ITenantsGetDataDto {
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   id: string;
 
-  @ApiProperty({ type: IFarmsGetAllDto })
+  /*  @ApiProperty({ type: IFarmsGetAllDto })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   farm: IFarmsGetAllDto;
 
   @ApiProperty({ type: IPersonsGetDataDto, isArray: true })
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  members: Array<IPersonsGetDataDto>;
+  members: Array<IPersonsGetDataDto>; */
 }
 
 export class ITenantsGetByIdDto {

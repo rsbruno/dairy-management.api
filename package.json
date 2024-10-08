@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:migration": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
-    "prisma:seed": "ts-node prisma/seeds/index.ts",
+    "prisma:seed:farms": "ts-node prisma/seeds/farms.seed.ts",
+    "prisma:seed:roles": "ts-node prisma/seeds/roles.seed.ts",
     "prisma:studio": "pnpm prisma studio"
   },
   "dependencies": {

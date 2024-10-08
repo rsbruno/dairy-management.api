@@ -15,4 +15,16 @@ export const roles = {
       },
     },
   },
+  administrative: {
+    farms: {
+      findall: {
+        name: 'ADM-FARMS-FIND_ALL',
+        description: 'Lista todas as fazendas',
+      },
+      findbyid: {
+        name: 'ADM-FARMS-FIND_BY_ID',
+        description: 'Busca uma fazenda pelo id',
+      },
+    },
+  },
 };

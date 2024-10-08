@@ -12,6 +12,8 @@ model Persons {
   keycloakId String    @unique
   username   String    @unique
   tenants    Tenants[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@map("persons")
 }
@@ -23,15 +25,19 @@ model Tenants {
   farm         Farms     @relation(fields: [farmsId], references: [id])
   farmsId      String    @unique
   members      Persons[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("tenants")
 }
 
 model Farms {
-  id      String   @id @default(cuid())
-  name    String
-  cnpj    String   @unique
-  Tenants Tenants?
+  id        String   @id @default(cuid())
+  name      String
+  cnpj      String   @unique
+  Tenants   Tenants?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("farms")
 }

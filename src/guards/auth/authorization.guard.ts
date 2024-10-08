@@ -23,11 +23,12 @@ export class AuthorizationGuard implements CanActivate {
         context.getHandler(),
         context.getClass(),
       ]);
+      console.log(requiredRoles);
       if (!requiredRoles?.length) return true;
       else {
-        const user = await this.authConfigsService.getMe();
-        if (!user) throw new UnauthorizedException(commonExceptions.http.unauthorized);
-        const userRoles = user.roles.map((r) => r.name);
+        const roles = this.authConfigsService.getUser().roles;
+        if (!roles.length) throw new UnauthorizedException(commonExceptions.http.unauthorized);
+        const userRoles = roles.map((r) => r.name);
         const rolesNotFound = requiredRoles.filter((role) => !userRoles.includes(role));
         if (rolesNotFound.length) throw new ForbiddenException({ roles: rolesNotFound });
         return true;

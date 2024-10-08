@@ -1,13 +1,11 @@
-import { Module } from '@nestjs/common';
-import { FarmsService } from './farms.service';
+import { PersonsModule } from '../../identity/persons/persons.module';
 import { FarmsController } from './farms.controller';
 import { FarmsRepository } from './farms.repository';
-import { TenantsModule } from '../tenants/tenants.module';
-import { AuthConfigsModule } from '@/configs/auth-configs/auth-configs.module';
-import { PersonsModule } from '../../identity/persons/persons.module';
+import { FarmsService } from './farms.service';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [TenantsModule, AuthConfigsModule, PersonsModule],
+  imports: [PersonsModule],
   controllers: [FarmsController],
   providers: [FarmsService, FarmsRepository],
 })

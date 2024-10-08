@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class IAuthAccessGetDto {
-  @ApiProperty({ example: 'Token de acesso' })
+  @ApiProperty()
   access_token: string;
-  @ApiProperty({ example: 'Token de atualização' })
+  @ApiProperty()
   refresh_token: string;
 }
 
 export class IAuthRefreshGetDto {
-  @ApiProperty({ example: 'Token de acesso' })
+  @ApiProperty()
   access_token: string;
 }

@@ -3,7 +3,7 @@ import { IsCNPJ } from '@/decorators/validators/is-cnpj.decorator';
 import { ArrayMinSize, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-class IFarmsMembersCreateDto {
+export class IFarmsMembersCreateDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   personId: string;

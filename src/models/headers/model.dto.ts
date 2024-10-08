@@ -1,9 +1,9 @@
-import { IUsersGetAllDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
+/* import { IUsersGetAllDto } from '@/domains/v1/identity/persons/dto/get/model.dto'; */
 
-export class IHoIAm extends IUsersGetAllDto {
+/* export class IHoIAm extends IUsersGetAllDto {
   roles: Array<string>;
 }
-
+ */
 export class IJWTGetDataDto {
   payload: {
     exp: number;
