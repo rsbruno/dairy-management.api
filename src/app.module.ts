@@ -9,6 +9,8 @@ import { AuthModule } from './domains/v1/identity/auth/auth.module';
 import { PersonsModule } from './domains/v1/identity/persons/persons.module';
 import { AuthConfigsModule } from './configs/auth-configs/auth-configs.module';
 import { FarmsModule } from './domains/v1/administrative/farms/farms.module';
+import { CostCenterModule } from './domains/v1/finance/cost-center/cost-center.module';
+import { ProductsModule } from './domains/v1/administrative/products/products.module';
 
 @Module({
   imports: [
@@ -20,10 +22,9 @@ import { FarmsModule } from './domains/v1/administrative/farms/farms.module';
     PrismaModule,
     PersonsModule,
     AuthConfigsModule,
-    FarmsModule
-    /*  PersonsModule, */
-    /*  TenantsModule,
-    FarmsModule, */
+    FarmsModule,
+    CostCenterModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}

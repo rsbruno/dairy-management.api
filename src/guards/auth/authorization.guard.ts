@@ -23,7 +23,6 @@ export class AuthorizationGuard implements CanActivate {
         context.getHandler(),
         context.getClass(),
       ]);
-      console.log(requiredRoles);
       if (!requiredRoles?.length) return true;
       else {
         const roles = this.authConfigsService.getUser().roles;

@@ -60,6 +60,10 @@ export class IOffsetPagination<R = Array<{}>> {
   @Min(1, { message: commonExceptions.param.isMinValue['1'] })
   page?: number = 1;
 
+  private capitalizeFirstLetter(model: string): Prisma.ModelName {
+    return (model.charAt(0).toLowerCase() + model.slice(1)) as Prisma.ModelName;
+  }
+
   async paginate<T extends keyof PrismaClient>(model: Prisma.ModelName, options?: PrismaMethods[T]) {
     const offsetSalt = (this.pagination.page! - 1) * this.pagination.max;
     const args = {
@@ -71,8 +75,8 @@ export class IOffsetPagination<R = Array<{}>> {
       ...options,
     } as PrismaMethods[T];
     const response = await this.prisma.$transaction([
-      this.prisma?.[model?.toLowerCase()]?.findMany(args as PrismaMethods[T]),
-      this.prisma?.[model?.toLowerCase()]?.count({
+      this.prisma?.[this.capitalizeFirstLetter(model)]?.findMany(args as PrismaMethods[T]),
+      this.prisma?.[this.capitalizeFirstLetter(model)]?.count({
         where: args.where ?? {},
         orderBy: args.orderBy,
         take: args.take,

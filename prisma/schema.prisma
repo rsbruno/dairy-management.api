@@ -32,12 +32,41 @@ model Tenants {
 }
 
 model Farms {
-  id        String   @id @default(cuid())
-  name      String
-  cnpj      String   @unique
-  Tenants   Tenants?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String       @id @default(cuid())
+  name       String
+  cnpj       String       @unique
+  Tenants    Tenants?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  CostCenter CostCenter[]
+  products   Products[]
 
   @@map("farms")
+}
+
+model CostCenter {
+  id          String     @id @default(cuid())
+  name        String     @db.VarChar(100)
+  description String?    @db.VarChar(200)
+  farmId      String
+  farm        Farms      @relation(fields: [farmId], references: [id])
+  products    Products[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("costCenter")
+}
+
+model Products {
+  id           String      @id @default(cuid())
+  name         String      @db.VarChar(100)
+  description  String?     @db.VarChar(200)
+  quantity     Float
+  unitPrice    Float
+  costCenter   CostCenter? @relation(fields: [costCenterId], references: [id])
+  costCenterId String?
+  farm         Farms?      @relation(fields: [farmId], references: [id])
+  farmId       String?
+
+  @@map("products")
 }
