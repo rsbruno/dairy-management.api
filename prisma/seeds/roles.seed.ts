@@ -28,7 +28,7 @@ async function seedRoles() {
       http.post<IAuthAccessGetDto>(
         `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
         new URLSearchParams({
-          client_secret: 'khtMLYJ3SmKCaI41aEDaQcAom12aGUAm',
+          client_secret: 'M6K3PKBNqBo728NhCgo2QIuZbYqo3sIQ',
           username: 'johndoe@email.com',
           client_id: 'erp-milk-client',
           grant_type: 'password',

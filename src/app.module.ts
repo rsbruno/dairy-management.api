@@ -11,6 +11,8 @@ import { AuthConfigsModule } from './configs/auth-configs/auth-configs.module';
 import { FarmsModule } from './domains/v1/administrative/farms/farms.module';
 import { CostCenterModule } from './domains/v1/finance/cost-center/cost-center.module';
 import { ProductsModule } from './domains/v1/administrative/products/products.module';
+import { TransactionsModule } from './domains/v1/finance/transactions/transactions.module';
+import { TransactionsTypesModule } from './domains/v1/finance/transactions-types/transactions-types.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { ProductsModule } from './domains/v1/administrative/products/products.mo
     FarmsModule,
     CostCenterModule,
     ProductsModule,
+    TransactionsModule,
+    TransactionsTypesModule,
   ],
 })
 export class AppModule {}

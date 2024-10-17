@@ -4,7 +4,7 @@ import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-class IAuthConfigsUserGetAllDto extends IPersonsGetDataDto {
+export class IAuthConfigsUserGetAllDto extends IPersonsGetDataDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   keycloakId: string;

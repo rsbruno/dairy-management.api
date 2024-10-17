@@ -39,6 +39,10 @@ export const roles = {
         name: 'ADM-PRODUCTS-CREATE',
         description: 'Adiciona um produto',
       },
+      'update-values': {
+        name: 'ADM-PRODUCTS-UPDATE_VALUES',
+        description: 'Atualiza os valores de um produto',
+      },
     },
   },
   finance: {
@@ -54,6 +58,26 @@ export const roles = {
       create: {
         name: 'ADM-COST_CENTER-CREATE',
         description: 'Adiciona um centro de custo',
+      },
+    },
+    transactions: {
+      'findall-by-product': {
+        name: 'ADM-TRANSACTION_PRODUCT-FIND_ALL',
+        description: 'Lista todas as transações de um produto',
+      },
+      create: {
+        name: 'ADM-TRANSACTION-CREATE',
+        description: 'Adiciona uma transação',
+      },
+    },
+    transactionTypes: {
+      findbyid: {
+        name: 'ADM-TRANSACTION_TYPES-FIND_BY_ID',
+        description: 'Busca um tipo de transação pelo id',
+      },
+      findall: {
+        name: 'ADM-TRANSACTION_TYPES-FIND_ALL',
+        description: 'Lista todos os tipos de transações',
       },
     },
   },
