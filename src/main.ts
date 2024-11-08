@@ -24,6 +24,11 @@ async function bootstrap() {
     new TypeErrorExceptionFilter(),
     new AuthenticationExceptionFilter(),
   );
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
   if (String(process.env.NODE_ENV).trim() === 'dev') addDocWithSwagger(app);
   await app.listen(process.env.PORT);
 }
