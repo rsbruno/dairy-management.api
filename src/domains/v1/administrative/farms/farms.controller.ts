@@ -11,7 +11,7 @@ import { IFarmsGetDataDto } from './dto/get/model.dto';
 import { FarmsService } from './farms.service';
 import { ApiTags } from '@nestjs/swagger';
 
-@Controller('farms')
+@Controller('v1/farms')
 @ApiTags('Farms')
 @UseGuards(AuthenticationGuard, AuthorizationGuard)
 export class FarmsController {
