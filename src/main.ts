@@ -30,6 +30,6 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization',
   });
   if (String(process.env.NODE_ENV).trim() === 'dev') addDocWithSwagger(app);
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 8080);
 }
 bootstrap();
