@@ -3,14 +3,24 @@ import { INestApplication } from '@nestjs/common';
 
 export const addDocWithSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('ERP Gestão de Leite')
+    .setTitle('Gestão de Leite')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document, {
+  SwaggerModule.setup("docs", app, document, {
+    customfavIcon: "https://static1.smartbear.co/swagger/media/assets/swagger_fav.png",
+    customJs: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js",
+    ],
+    customCssUrl: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css",
+    ],
     swaggerOptions: {
       defaultModelsExpandDepth: -1,
-      docExpansion: 'none',
+      docExpansion: "none",
       filter: true,
     },
   });
