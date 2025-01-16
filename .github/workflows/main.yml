@@ -1,20 +1,17 @@
 name: deploy to lambda
-on: [ push ]
+on: [push]
 jobs:
   deploy_zip:
     name: deploy lambda function
     runs-on: ubuntu-latest
     steps:
-      - name: checkout source code
+      - name: Checkout source code
         uses: actions/checkout@v1
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Install dependencies
         run: npm install
@@ -24,8 +21,8 @@ jobs:
 
       - name: Generate ZIP
         run: |
-          zip -r deployment.zip *      
-      - name: default deploy
+          zip -r deployment.zip *
+      - name: Default deploy
         uses: appleboy/lambda-action@master
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
