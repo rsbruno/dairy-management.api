@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   deploy_zip:
-    name: deploy lambda function
+    name: Deploy Lambda Function
     runs-on: ubuntu-latest
     steps:
       # Checkout do código-fonte
@@ -23,31 +23,22 @@ jobs:
       # Gerar o arquivo ZIP para implantação
       - name: Generate ZIP
         run: |
-          zip -r deployment.zip *
+          zip -r lambda.zip *
           echo "Generated ZIP file:"
-          ls -lh deployment.zip
+          ls -lh lambda.zip
 
-      # Garantir que o diretório estático exista no S3
-      - name: Ensure directory exists in S3
-        run: |
-          aws s3api head-object --bucket ${{ secrets.S3_BUCKET_NAME }} --key static/ || \
-          aws s3api put-object --bucket ${{ secrets.S3_BUCKET_NAME }} --key static/
+      # Fazer upload do arquivo ZIP para o S3
+      - name: Upload file to bucket
+        uses: a-sync/s3-uploader@master
+        with:
+          args: --acl public-read
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-
-      # Fazer upload do diretório estático para o S3
-      - uses: shallwefootball/s3-upload-action@master
-        name: Upload S3
-        id: S3
-        with:
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_dir: 'static'
-          dest_dir: 'static/'
-          region: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+          S3_KEY: static/lambda.zip
+          FILE: ./lambda.zip
 
       # Atualizar a função Lambda com o arquivo do S3
       - name: Update Lambda function from S3
@@ -55,7 +46,7 @@ jobs:
           aws lambda update-function-code \
             --function-name milk-erp-api \
             --s3-bucket ${{ secrets.S3_BUCKET_NAME }} \
-            --s3-key deployment.zip \
+            --s3-key static/lambda.zip \
             --region ${{ secrets.AWS_REGION }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
