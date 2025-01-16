@@ -34,18 +34,14 @@ jobs:
             exit 1
           fi
 
-      # Fazer upload do arquivo ZIP para o S3 usando a ação `s3-zip-upload`
-      - name: Upload ZIP to S3
-        uses: NotCoffee418/s3-zip-upload@v1.5
+      - uses: shallwefootball/s3-upload-action@master
+        name: Upload S3
+        id: S3
         with:
-          aws-secret-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket-name: ${{ secrets.S3_BUCKET_NAME }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          source-mode: ZIP
-          source-path: ./deployment.zip
-          dest-file: deployment.zip
-          content-type: application/zip
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_BUCKET }}
+          source_dir: 'static'
 
       # Atualizar a função Lambda com o arquivo do S3
       - name: Update Lambda function from S3
