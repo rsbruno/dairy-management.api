@@ -27,18 +27,13 @@ jobs:
           echo "Generated ZIP file:"
           ls -lh lambda.zip
 
-      # Fazer upload do arquivo ZIP para o S3
-      - name: Upload file to bucket
-        uses: a-sync/s3-uploader@master
-        with:
-          args: --acl public-read
+      # Fazer upload do arquivo ZIP para o S3 usando AWS CLI
+      - name: Upload ZIP to S3
+        run: |
+          aws s3 cp lambda.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda.zip --region ${{ secrets.AWS_REGION }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-          S3_KEY: lambda.zip
-          FILE: ./lambda.zip
 
       # Atualizar a função Lambda com o arquivo do S3
       - name: Update Lambda function from S3
