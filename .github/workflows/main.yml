@@ -23,20 +23,22 @@ jobs:
       - name: Generate ZIP
         run: |
           zip -r deployment.zip *
-          ls -lh deployment.zip
+          ls -lh
 
       # Verificar se o arquivo ZIP foi gerado
       - name: Verify ZIP existence
         run: |
-          if [ ! -f "deployment.zip" ]; then
-            echo "Error: deployment.zip not found."
+          pwd
+          ls -lh
+          if [ ! -f "./deployment.zip" ]; then
+            echo "Error: deployment.zip not found in $(pwd)."
             exit 1
           fi
 
       # Fazer upload do arquivo ZIP para o S3
       - name: Upload ZIP to S3
         run: |
-          aws s3 cp deployment.zip s3://$S3_BUCKET_NAME/deployment.zip
+          aws s3 cp ./deployment.zip s3://$S3_BUCKET_NAME/deployment.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
