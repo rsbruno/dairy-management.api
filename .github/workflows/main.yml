@@ -1,5 +1,6 @@
 name: deploy to lambda
 on: [push]
+
 jobs:
   deploy_zip:
     name: deploy lambda function
@@ -26,22 +27,27 @@ jobs:
           echo "Generated ZIP file:"
           ls -lh deployment.zip
 
-      # Verificar se o arquivo ZIP foi gerado
-      - name: Verify ZIP existence
+      # Garantir que o diretório estático exista no S3
+      - name: Ensure directory exists in S3
         run: |
-          if [ ! -f "deployment.zip" ]; then
-            echo "Error: deployment.zip not found."
-            exit 1
-          fi
+          aws s3api head-object --bucket ${{ secrets.S3_BUCKET_NAME }} --key static/ || \
+          aws s3api put-object --bucket ${{ secrets.S3_BUCKET_NAME }} --key static/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
+      # Fazer upload do diretório estático para o S3
       - uses: shallwefootball/s3-upload-action@master
         name: Upload S3
         id: S3
         with:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
           source_dir: 'static'
+          dest_dir: 'static/'
+          region: ${{ secrets.AWS_REGION }}
 
       # Atualizar a função Lambda com o arquivo do S3
       - name: Update Lambda function from S3
