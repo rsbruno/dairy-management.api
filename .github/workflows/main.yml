@@ -37,7 +37,7 @@ jobs:
       - name: Update Lambda function
         run: |
           aws lambda update-function-code \
-            --function-name my-lambda-function \
+            --function-name milk-erp-api \
             --s3-bucket ${{ secrets.S3_BUCKET_NAME }} \
             --s3-key lambda.zip \
             --region ${{ secrets.AWS_REGION }}
