@@ -22,11 +22,26 @@ jobs:
       - name: Generate ZIP
         run: |
           zip -r deployment.zip *
-      - name: Default deploy
-        uses: appleboy/lambda-action@master
+
+      - name: Upload ZIP to S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
-          function_name: milk-erp-api
-          zip_file: deployment.zip
+          args: --acl private
+        env:
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: deployment.zip
+          DEST_DIR: deployment.zip
+
+      - name: Update Lambda function from S3
+        run: |
+          aws lambda update-function-code \
+            --function-name milk-erp-api \
+            --s3-bucket ${{ secrets.S3_BUCKET_NAME }} \
+            --s3-key deployment.zip \
+            --region ${{ secrets.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
