@@ -19,14 +19,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Checar informações de funding
-      - name: Check funding details
-        run: npm fund
-
       # Gerar o arquivo ZIP para implantação
       - name: Generate ZIP
         run: |
           zip -r deployment.zip *
+          ls -lh deployment.zip
+
+      # Verificar se o arquivo ZIP foi gerado
+      - name: Verify ZIP existence
+        run: |
+          if [ ! -f "deployment.zip" ]; then
+            echo "Error: deployment.zip not found."
+            exit 1
+          fi
 
       # Fazer upload do arquivo ZIP para o S3
       - name: Upload ZIP to S3
