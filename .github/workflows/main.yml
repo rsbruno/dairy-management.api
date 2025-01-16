@@ -5,43 +5,49 @@ jobs:
     name: deploy lambda function
     runs-on: ubuntu-latest
     steps:
+      # Checkout do código-fonte
       - name: Checkout source code
         uses: actions/checkout@v1
 
+      # Configuração do Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # Instalação das dependências
       - name: Install dependencies
         run: npm install
 
+      # Checar informações de funding
       - name: Check funding details
         run: npm fund
 
+      # Gerar o arquivo ZIP para implantação
       - name: Generate ZIP
         run: |
           zip -r deployment.zip *
 
+      # Fazer upload do arquivo ZIP para o S3
       - name: Upload ZIP to S3
-        uses: jakejarvis/s3-sync-action@v0.5.1
-        with:
-          args: --acl private
+        run: |
+          aws s3 cp deployment.zip s3://$S3_BUCKET_NAME/deployment.zip
         env:
-          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: deployment.zip
-          DEST_DIR: deployment.zip
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
 
+      # Atualizar a função Lambda com o arquivo do S3
       - name: Update Lambda function from S3
         run: |
           aws lambda update-function-code \
             --function-name milk-erp-api \
-            --s3-bucket ${{ secrets.S3_BUCKET_NAME }} \
+            --s3-bucket $S3_BUCKET_NAME \
             --s3-key deployment.zip \
-            --region ${{ secrets.AWS_REGION }}
+            --region $AWS_REGION
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
