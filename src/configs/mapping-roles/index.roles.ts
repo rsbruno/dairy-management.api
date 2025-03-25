@@ -81,4 +81,16 @@ export const roles = {
       },
     },
   },
+  parameters: {
+    measurementUnits: {
+      findall: {
+        name: 'ADM-MEASUREMENT_UNITS-FIND_ALL',
+        description: 'Lista todas as unidades de medida',
+      },
+      findbyid: {
+        name: 'ADM-MEASUREMENT_UNITS-FIND_BY_ID',
+        description: 'Busca uma unidade de medida pelo id',
+      },
+    },
+  },
 };

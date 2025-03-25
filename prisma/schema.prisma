@@ -43,6 +43,7 @@ model Farms {
   products          Products[]
   Transactions      Transactions[]
   TransactionsTypes TransactionsTypes[]
+  MeasurementUnits  MeasurementUnits[]
 
   @@map("farms")
 }
@@ -103,4 +104,18 @@ model TransactionsTypes {
   farmId       String
 
   @@map("transactions_types")
+}
+
+model MeasurementUnits {
+  id             String   @id @default(cuid())
+  name           String
+  code           String
+  farm           Farms?   @relation(fields: [farmId], references: [id])
+  farmId         String?
+  baseUnit       String
+  conversionRate Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("measurement_units")
 }

@@ -23,6 +23,7 @@
     "prisma:seed:farms": "ts-node prisma/seeds/farms.seed.ts",
     "prisma:seed:roles": "ts-node prisma/seeds/roles.seed.ts",
     "prisma:seed:transactions-types": "ts-node prisma/seeds/transactions-types.seed.ts",
+    "prisma:seed:measurement-units": "ts-node prisma/seeds/parameters/measurement-units/measurement-units.seed.ts",
     "prisma:studio": "pnpm prisma studio"
   },
   "dependencies": {

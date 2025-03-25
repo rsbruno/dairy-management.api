@@ -13,6 +13,7 @@ import { CostCenterModule } from './domains/v1/finance/cost-center/cost-center.m
 import { ProductsModule } from './domains/v1/administrative/products/products.module';
 import { TransactionsModule } from './domains/v1/finance/transactions/transactions.module';
 import { TransactionsTypesModule } from './domains/v1/finance/transactions-types/transactions-types.module';
+import { MeasurementUnitsModule } from './domains/v1/parameters/measurement-units/measurement-units.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TransactionsTypesModule } from './domains/v1/finance/transactions-types
     ProductsModule,
     TransactionsModule,
     TransactionsTypesModule,
+    MeasurementUnitsModule,
   ],
 })
 export class AppModule {}
