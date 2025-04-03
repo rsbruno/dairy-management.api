@@ -1,7 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 
 export const businessException = {
-  ATN100: { message: 'usuário sem acesso ao cliente!', statusCode: HttpStatus.FORBIDDEN },
   'F-TRS-100': {
     message: 'em movimentações de saída a quantidade não pode ser menor que o valor disponível em estoque',
     statusCode: HttpStatus.BAD_REQUEST,
@@ -14,4 +13,5 @@ export const businessException = {
     message: 'o tipo de transação não existe',
     statusCode: HttpStatus.BAD_REQUEST,
   },
+  ATN100: { message: 'usuário sem acesso ao cliente!', statusCode: HttpStatus.FORBIDDEN },
 };

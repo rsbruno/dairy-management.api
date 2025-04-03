@@ -1,4 +1,4 @@
-import { IAuthAccessGetDto } from '@/domains/v1/identity/auth/dto/get/model.dto';
+import { IAuthAccessGetDTO } from '@/domains/v1/identity/auth/dto/get/model.dto';
 import { roles } from '../../src/configs/mapping-roles/index.roles';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
@@ -25,7 +25,7 @@ async function seedRoles() {
     const {
       data: { access_token },
     } = await lastValueFrom(
-      http.post<IAuthAccessGetDto>(
+      http.post<IAuthAccessGetDTO>(
         `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
         new URLSearchParams({
           client_secret: 'M6K3PKBNqBo728NhCgo2QIuZbYqo3sIQ',

@@ -1,4 +1,4 @@
 export enum DataStatus {
-  ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
+  ACTIVE = 'ACTIVE',
 }

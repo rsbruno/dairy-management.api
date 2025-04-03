@@ -1,47 +1,52 @@
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { IOffsetPaginationResponse, IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { IPersonsGetAllDto } from './dto/get/model.dto';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+import { IPersonsSelectDTO } from './dto/get/model.dto';
+
 @Injectable()
 export class PersonsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authConfigsService: AuthConfigsService,
+  ) {}
 
-  async findBy(where: Prisma.PersonsWhereInput) {
+  async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<IPersonsSelectDTO[]>> {
     try {
-      const response = await this.prisma.persons.findFirstOrThrow({
-        where,
-        select: {
-          keycloakId: true,
-          id: true,
-          username: true,
+      const { tenant } = this.authConfigsService.getUser();
+      const paginateService = new IOffsetPagination<IPersonsSelectDTO>(this.prisma, pagination);
+      return await paginateService.paginate('Persons', {
+        where: {
           tenants: {
-            select: {
-              farm: true,
-              members: true,
+            some: {
+              farmsId: tenant.farm.id,
             },
           },
         },
+        include: { tenants: { include: { farm: true } } },
       });
-      return response;
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(pagination: IOffsetPagination, where?: Prisma.PersonsWhereInput) {
+  async findBy(where: Prisma.PersonsWhereInput) {
     try {
-      const paginateService = new IOffsetPagination<Array<IPersonsGetAllDto>>(this.prisma, pagination);
-      const response = await paginateService.paginate('Persons', {
-        where: where ?? {},
-        select: {
-          id: true,
-          keycloakId: true,
-          tenants: true,
+      const { tenant } = this.authConfigsService.getUser();
+      const response = await this.prisma.persons.findFirstOrThrow({
+        where: {
+          tenants: {
+            some: {
+              farmsId: tenant.farm.id,
+            },
+          },
+          AND: where,
         },
+        include: { tenants: { include: { farm: true } } },
       });
-      return response;
+      return response as unknown as IPersonsSelectDTO;
     } catch (error) {
       throw error;
     }

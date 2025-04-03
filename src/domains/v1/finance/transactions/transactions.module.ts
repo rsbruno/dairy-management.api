@@ -1,10 +1,11 @@
-import { TransactionsTypesModule } from '../transactions-types/transactions-types.module';
-import { ProductsModule } from '@/domains/v1/administrative/products/products.module';
-import { PersonsModule } from '../../identity/persons/persons.module';
+import { TransactionsTypesModule } from '@/domains/v1/parameters/transactions-types/transactions-types.module';
+import { PersonsModule } from '@/domains/v1/identity/persons/persons.module';
+import { Module } from '@nestjs/common';
+
+import { ProductsModule } from '../../stock/products/products.module';
 import { TransactionsRepository } from './transactions.repository';
 import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
-import { Module } from '@nestjs/common';
 
 @Module({
   imports: [ProductsModule, TransactionsTypesModule, PersonsModule],

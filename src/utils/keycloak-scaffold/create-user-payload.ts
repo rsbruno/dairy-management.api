@@ -19,6 +19,13 @@ export interface ICreateUserProps {
 }
 
 export const createUserTemplatePayload = (payload: Partial<ICreateUserProps>): ICreateUserProps => ({
+  credentials: [
+    {
+      value: generateSecret(8, true),
+      temporary: false,
+      type: 'password',
+    },
+  ],
   username: payload.email ?? payload.username,
   groups: payload.groups ?? [],
   firstName: payload.firstName,
@@ -27,11 +34,4 @@ export const createUserTemplatePayload = (payload: Partial<ICreateUserProps>): I
   email: payload.email,
   requiredActions: [],
   enabled: true,
-  credentials: [
-    {
-      value: generateSecret(8, true),
-      temporary: false,
-      type: 'password',
-    },
-  ],
 });

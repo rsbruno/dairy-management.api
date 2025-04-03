@@ -1,46 +1,29 @@
-import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
-import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
-import { PersonsService } from '../../identity/persons/persons.service';
-import { IFarmsGetAllDto, IFarmsGetDataDto } from './dto/get/model.dto';
-import { FarmsRepository } from './farms.repository';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { Injectable } from '@nestjs/common';
+
+import { FarmsRepository } from './farms.repository';
+import { IFarmsDataDTO } from './dto/get/model.dto';
 
 @Injectable()
 export class FarmsService {
-  constructor(
-    private readonly farmsRepository: FarmsRepository,
-    private readonly authConfigsService: AuthConfigsService,
-    private readonly personsService: PersonsService,
-  ) {}
+  constructor(private readonly farmsRepository: FarmsRepository) {}
 
-  async findById(id: string) {
+  async findAll(pagination: IOffsetPagination) {
     try {
-      const response = await this.farmsRepository.findBy({ id });
-      const membersMap = await Promise.all(
-        response?.Tenants?.members?.map(async (member) => await this.personsService.findById(member.id)),
-      );
-      return { ...IFarmsGetAllDto.toIFarmsGetDataDto(response), members: membersMap ?? [] };
+      const farms = await this.farmsRepository.findAll(pagination);
+      return {
+        ...farms,
+        items: farms.items.map(farm => IFarmsDataDTO.transform(farm)),
+      };
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<Array<IFarmsGetDataDto>>> {
+  async findById(id: string) {
     try {
-      const { info } = this.authConfigsService.getUser();
-      const repositoryResponse = await this.farmsRepository.findAll(pagination, {
-        Tenants: {
-          members: {
-            some: { id: info.id },
-          },
-        },
-      });
-      const items = await Promise.all(
-        repositoryResponse.items.map(
-          async (farm) => await this.findById(farm.id),
-        ) as unknown as Array<IFarmsGetDataDto>,
-      );
-      return { ...repositoryResponse, items } as IOffsetPaginationResponse<Array<IFarmsGetDataDto>>;
+      const farm = await this.farmsRepository.findBy({ id });
+      return IFarmsDataDTO.transform(farm);
     } catch (error) {
       throw error;
     }

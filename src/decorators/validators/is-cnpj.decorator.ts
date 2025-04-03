@@ -1,22 +1,22 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
+import { registerDecorator, ValidationOptions } from 'class-validator';
 import { cnpj } from 'cpf-cnpj-validator';
 
 export function IsCNPJ(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'isCNPJ',
-      target: object.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
       validator: {
-        validate(value: string, _: ValidationArguments) {
+        validate(value: string) {
           return typeof value === 'string' && cnpj.isValid(value);
         },
-        defaultMessage(_: ValidationArguments) {
+        defaultMessage() {
           return commonExceptions.param.isNotCNPJ;
         },
       },
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      name: 'isCNPJ',
     });
   };
 }

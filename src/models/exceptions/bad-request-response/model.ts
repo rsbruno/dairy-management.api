@@ -2,14 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
 
 class IBadRequestErrors {
+  @ApiProperty({ example: 'Mensagem de exemplo' })
+  message: string;
+
   @ApiProperty({
     example: '/caminho/sub-caminho',
     required: false,
   })
   path?: string;
-
-  @ApiProperty({ example: 'Mensagem de exemplo' })
-  message: string;
 }
 
 export class IBadRequestResponse {

@@ -1,51 +1,49 @@
+import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
 import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { IFarmsGetAllDto } from './dto/get/model.dto';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+import { IFarmsSelectDTO } from './dto/get/model.dto';
+
 @Injectable()
 export class FarmsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authConfigsService: AuthConfigsService,
+  ) {}
 
-  async findBy(where: Prisma.FarmsWhereInput): Promise<IFarmsGetAllDto> {
+  async findAll(pagination: IOffsetPagination) {
     try {
-      const response = await this.prisma.farms.findFirstOrThrow({
-        where,
-        select: {
-          cnpj: true,
-          name: true,
-          id: true,
+      const { info } = this.authConfigsService.getUser();
+      const paginateService = new IOffsetPagination<IFarmsSelectDTO>(this.prisma, pagination);
+      return await paginateService.paginate('Farms', {
+        where: {
           Tenants: {
-            select: {
-              clientId: true,
-              clientSecret: true,
-              members: true,
-              _count: {
-                select: {
-                  members: true,
-                },
-              },
+            members: {
+              some: { id: info.id },
             },
           },
         },
       });
-      return response as unknown as IFarmsGetAllDto;
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(pagination: IOffsetPagination, where?: Prisma.FarmsWhereInput) {
+  async findBy(where: Prisma.FarmsWhereInput): Promise<IFarmsSelectDTO> {
     try {
-      const paginateService = new IOffsetPagination<Array<IFarmsGetAllDto>>(this.prisma, pagination);
-      const response = await paginateService.paginate('Farms', {
-        where: where ?? {},
-        select: {
-          id: true,
+      const { info } = this.authConfigsService.getUser();
+      return (await this.prisma.farms.findFirstOrThrow({
+        where: {
+          Tenants: {
+            members: {
+              some: { id: info.id },
+            },
+          },
+          AND: where,
         },
-      });
-      return response;
+      })) as unknown as IFarmsSelectDTO;
     } catch (error) {
       throw error;
     }

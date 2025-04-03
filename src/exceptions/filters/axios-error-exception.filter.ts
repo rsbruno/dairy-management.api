@@ -28,11 +28,11 @@ export class AxiosErrorExceptionFilter implements ExceptionFilter {
     }
     this.logger.error({
       messageException: `${exception.message} | ${error}`,
+      targetUrl: exception.request.path,
+      stack: exception.stack,
       messageClient,
       method,
       url,
-      targetUrl: exception.request.path,
-      stack: exception.stack,
     });
     response.status(statusCode).json({
       errors: [{ message: messageClient }],

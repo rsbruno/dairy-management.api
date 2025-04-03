@@ -1,6 +1,6 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class IAuthLogoutParamDto {
   @ApiProperty()

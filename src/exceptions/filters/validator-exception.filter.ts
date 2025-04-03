@@ -1,6 +1,7 @@
-import { ExceptionFilter, ArgumentsHost, HttpStatus, Catch, Logger } from '@nestjs/common';
-import { CustomValidatorException } from '../custom-validator.exception';
+import { ExceptionFilter, ArgumentsHost, HttpStatus, Logger, Catch } from '@nestjs/common';
 import { Response } from 'express';
+
+import { CustomValidatorException } from '../custom-validator.exception';
 
 @Catch(CustomValidatorException)
 export class ValidatorExceptionFilter implements ExceptionFilter {
@@ -12,16 +13,16 @@ export class ValidatorExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const { method, url } = request;
     this.logger.error({
+      stack: JSON.stringify(exception.errors),
       validatorCode: HttpStatus.BAD_REQUEST,
       messageException: exception.message,
       messageClient: exception.message,
       method,
       url,
-      stack: JSON.stringify(exception.errors),
     });
     response.status(HttpStatus.BAD_REQUEST).json({
-      errors: exception.errors,
       statusCode: HttpStatus.BAD_REQUEST,
+      errors: exception.errors,
     });
   }
 }

@@ -1,120 +1,87 @@
-import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
-import { IProductsGetDataDto } from '@/domains/v1/administrative/products/dto/get/model';
-import { ITransactionsTypesGetDataDto } from '../transactions-types/dto/get/model';
-import { CustomBusinessException } from '@/exceptions/custom-business.exception';
-import { transactionsTypesEnum } from '@/enums/transactions-types.enum';
+import { IOffsetPaginationResponse, IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { ITransactionsCreateDto } from './dto/body/model.dto';
-import { ITransactionGetAllDto } from './dto/get/model';
 import { Injectable } from '@nestjs/common';
-import {
-  IAuthConfigsTenantsGetAllDto,
-  IAuthConfigsUserGetAllDto,
-} from '@/configs/auth-configs/dto/get/model.dto';
+
+import { ITransactionsFindAllDTO } from './dto/param/model.dto';
+import { ITransactionsCreateDTO } from './dto/body/model.dto';
+import { ITransactionSelectDTO } from './dto/get/model';
 
 @Injectable()
 export class TransactionsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  private selectQueryTransactions = {
+    product: { include: { measurementUnit: true } },
+    costCenter: { include: { parent: true } },
+    unitPrice: true,
+    quantity: true,
+    type: true,
+    id: true,
+  };
 
-  prepareProductToTrasaction(
-    product: IProductsGetDataDto,
-    transaction: ITransactionsCreateDto,
-    transactionType: ITransactionsTypesGetDataDto,
-  ) {
-    switch (transactionType.code) {
-      case transactionsTypesEnum.income.code:
-        //Se chegamos aqui estamos dando entrada no estoque
-        if (!transaction?.unityPrice) throw new CustomBusinessException('F-TRS-101');
-        product.quantity = product.quantity + transaction.quantity;
-        product.unitPrice = transaction.unityPrice;
-        break;
-      case transactionsTypesEnum.expense.code:
-        //Se chegamos aqui estamos dando saída no estoque
-        if (transaction.quantity > product.quantity) throw new CustomBusinessException('F-TRS-100');
-        product.quantity = Number(product.quantity - transaction.quantity);
-        break;
-      default:
-        throw new CustomBusinessException('F-TRS-102');
-    }
-    return product;
-  }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authConfigsService: AuthConfigsService,
+  ) {}
 
-  async create(
-    transactionsCreateDto: ITransactionsCreateDto,
-    tenant: IAuthConfigsTenantsGetAllDto,
-    info: IAuthConfigsUserGetAllDto,
-    product: IProductsGetDataDto,
-  ) {
+  async create(transactionsCreateDTO: ITransactionsCreateDTO) {
     try {
-      return await this.prisma.$transaction(async (schema) => {
-        const transaction = await schema.transactions.create({
-          data: {
-            description: transactionsCreateDto.description,
-            quantity: transactionsCreateDto.quantity,
-            unitPrice: product.unitPrice,
-            product: {
-              connect: {
-                id: transactionsCreateDto.productId,
-              },
-            },
-            responsible: {
-              connect: {
-                id: info.id,
-              },
-            },
-            farm: {
-              connect: {
-                id: tenant.farm.id,
-              },
-            },
-            type: {
-              connect: {
-                id: transactionsCreateDto.typeId,
-              },
+      const { info: user, tenant } = this.authConfigsService.getUser();
+      return (await this.prisma.transactions.create({
+        data: {
+          costCenter: {
+            connect: {
+              id: transactionsCreateDTO.costCenterId,
             },
           },
-        });
-        await schema.products.update({
-          data: { quantity: product.quantity, unitPrice: product.unitPrice },
-          where: { id: product.id },
-        });
-        return transaction;
-      });
+          product: {
+            connect: {
+              id: transactionsCreateDTO.productId,
+            },
+          },
+          type: {
+            connect: {
+              id: transactionsCreateDTO.typeId,
+            },
+          },
+          responsible: {
+            connect: {
+              id: user.id,
+            },
+          },
+          farm: {
+            connect: {
+              id: tenant.farm.id,
+            },
+          },
+          description: transactionsCreateDTO.description,
+          unitPrice: transactionsCreateDTO.unityPrice,
+          quantity: transactionsCreateDTO.quantity,
+        },
+        select: this.selectQueryTransactions,
+      })) as unknown as ITransactionSelectDTO;
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(
-    pagination: IOffsetPagination,
-    tenant: IAuthConfigsTenantsGetAllDto,
-    productId: string,
-  ): Promise<IOffsetPaginationResponse<Array<ITransactionGetAllDto>>> {
+  async findAll(query: ITransactionsFindAllDTO): Promise<IOffsetPaginationResponse<Array<ITransactionSelectDTO>>> {
     try {
-      const paginateService = new IOffsetPagination(this.prisma, pagination);
-      const response = await paginateService.paginate('Transactions', {
+      const { tenant } = this.authConfigsService.getUser();
+      const paginateService = new IOffsetPagination<ITransactionSelectDTO>(this.prisma, query);
+      return await paginateService.paginate('Transactions', {
         where: {
-          product: {
-            id: productId,
+          costCenter: query.costCenterId && {
+            id: query.costCenterId,
           },
-          AND: {
-            farm: {
-              id: tenant.farm.id,
-            },
+          product: query.productId && {
+            id: query.productId,
+          },
+          farm: {
+            id: tenant.farm.id,
           },
         },
-        select: {
-          description: true,
-          updatedAt: true,
-          unitPrice: true,
-          createdAt: true,
-          quantity: true,
-          id: true,
-          responsible: true,
-          type: true,
-        },
+        select: this.selectQueryTransactions,
       });
-      return response as unknown as IOffsetPaginationResponse<Array<ITransactionGetAllDto>>;
     } catch (error) {
       throw error;
     }

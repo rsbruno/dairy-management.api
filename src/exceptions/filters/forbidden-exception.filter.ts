@@ -1,13 +1,6 @@
+import { ForbiddenException, ExceptionFilter, ArgumentsHost, HttpStatus, Logger, Catch } from '@nestjs/common';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { Response } from 'express';
-import {
-  ForbiddenException,
-  ExceptionFilter,
-  ArgumentsHost,
-  HttpStatus,
-  Logger,
-  Catch,
-} from '@nestjs/common';
 
 @Catch(ForbiddenException)
 export class ForbiddenExceptionFilter implements ExceptionFilter {
@@ -20,14 +13,14 @@ export class ForbiddenExceptionFilter implements ExceptionFilter {
     const { method, url } = request;
     const { roles } = exception.getResponse() as any;
     this.logger.error({
-      messageException: exception.message,
       messageClient: commonExceptions.http.forbidden,
+      messageException: exception.message,
+      stack: exception.stack,
       method,
       url,
-      stack: exception.stack,
     });
     response.status(HttpStatus.FORBIDDEN).json({
-      errors: [{ roles, message: commonExceptions.http.forbidden }],
+      errors: [{ message: commonExceptions.http.forbidden, roles }],
       statusCode: HttpStatus.FORBIDDEN,
     });
   }

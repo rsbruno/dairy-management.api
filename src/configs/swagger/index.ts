@@ -4,24 +4,24 @@ import { INestApplication } from '@nestjs/common';
 export const addDocWithSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('Gestão de Leite')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT')
+    .addBearerAuth({ bearerFormat: 'JWT', scheme: 'bearer', type: 'http' }, 'JWT')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document, {
-    customfavIcon: "https://static1.smartbear.co/swagger/media/assets/swagger_fav.png",
-    customJs: [
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js",
-    ],
+  SwaggerModule.setup('docs', app, document, {
     customCssUrl: [
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css",
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css",
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
+    ],
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
     ],
     swaggerOptions: {
       defaultModelsExpandDepth: -1,
-      docExpansion: "none",
+      docExpansion: 'none',
       filter: true,
     },
+    customfavIcon: 'https://static1.smartbear.co/swagger/media/assets/swagger_fav.png',
   });
 };

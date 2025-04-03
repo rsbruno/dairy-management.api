@@ -1,7 +1,3 @@
-import { IForbiddenRequestResponse } from '@/models/exceptions/forbidden-request-response/model';
-import { IBadRequestResponse } from '@/models/exceptions/bad-request-response/model';
-import { IApiDocMethodConfigs } from '@/models/exceptions/swagger-response/model';
-import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -10,6 +6,10 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
+import { IForbiddenRequestResponse } from '@/models/exceptions/forbidden-request-response/model';
+import { IBadRequestResponse } from '@/models/exceptions/bad-request-response/model';
+import { IApiDocMethodConfigs } from '@/models/exceptions/swagger-response/model';
+import { applyDecorators } from '@nestjs/common';
 
 export function ApiDocMethodPatch(configs: IApiDocMethodConfigs) {
   const decorators = [

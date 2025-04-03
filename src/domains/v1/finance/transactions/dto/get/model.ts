@@ -1,77 +1,57 @@
-import { IPersonsGetDataDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
+import { ITransactionsSelectDTO, ITransactionsDataDTO } from '@/domains/v1/parameters/transactions-types/dto/get/model';
+import { ICostCenterSelectDTO, ICostCenterDataDTO } from '@/domains/v1/parameters/cost-center/dto/get/model';
+import { IProductsSelectDTO, IProductsDataDTO } from '@/domains/v1/stock/products/dto/get/model';
+import { Transactions } from 'prisma/prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ITransactionResponsibleGetAllDto {
-  id: string;
-  keycloakId: string;
-  username: string;
+export class ITransactionSelectDTO implements Transactions {
+  costCenter: ICostCenterSelectDTO;
+  costCenterId: string;
   createdAt: Date;
-  updatedAt: Date;
+  description: string;
+  farmId: string;
+  id: string;
+  product: IProductsSelectDTO;
+  productId: string;
+  quantity: number;
+  responsibleId: string;
+  type: ITransactionsSelectDTO;
+  typeId: string;
+  unitPrice: number;
 }
 
-export class ITransactionTypeGetAllDto {
+export class ITransactionDataDTO {
   @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  code: string;
-
-  farmId?: string;
-}
-
-export class ITransactionGetDataDto {
-  @ApiProperty()
-  id: string;
+  costCenter: ICostCenterDataDTO;
 
   @ApiProperty()
   description: string;
 
   @ApiProperty()
-  unitPrice: number;
-
-  @ApiProperty()
-  totalPrice: number;
-
-  @ApiProperty()
-  createdAt: Date;
-
-  @ApiProperty()
-  quantity: number;
-
-  @ApiProperty({ type: ITransactionTypeGetAllDto })
-  type: ITransactionTypeGetAllDto;
-
-  @ApiProperty({ type: IPersonsGetDataDto })
-  responsible: IPersonsGetDataDto;
-}
-
-export class ITransactionGetAllDto {
-  description: string;
-  updatedAt: Date;
-  unitPrice: number;
-  createdAt: Date;
-  quantity: number;
   id: string;
-  responsible: IPersonsGetDataDto;
-  type: ITransactionTypeGetAllDto;
 
-  public static toITransactionGetDataDto(data: ITransactionGetAllDto): ITransactionGetDataDto {
+  @ApiProperty()
+  product: IProductsDataDTO;
+
+  @ApiProperty()
+  quantity: number;
+
+  @ApiProperty()
+  type: ITransactionsDataDTO;
+
+  @ApiProperty()
+  unitPrice: number;
+
+  public static transform(transaction: ITransactionSelectDTO | null): ITransactionDataDTO {
+    if (!transaction) return null;
     return {
-      totalPrice: Number((data.quantity * data.unitPrice).toFixed(2)),
-      responsible: data.responsible,
-      description: data.description,
-      createdAt: data.createdAt,
-      unitPrice: data.unitPrice,
-      quantity: data.quantity,
-      id: data.id,
-      type: {
-        code: data.type.code,
-        name: data.type.name,
-        id: data.type.id,
-      },
+      costCenter: ICostCenterDataDTO.toICostCenterDataDTO(transaction.costCenter),
+      product: IProductsDataDTO.transform(transaction.product),
+      type: ITransactionsDataDTO.transform(transaction.type),
+      description: transaction.description,
+      unitPrice: transaction.unitPrice,
+      quantity: transaction.quantity,
+      id: transaction.id,
     };
   }
 }

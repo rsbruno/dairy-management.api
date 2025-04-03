@@ -1,54 +1,29 @@
-import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
-import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
-import { KeycloakUserService } from '@/keycloak/users/keycloak-user.service';
-import { IPersonsGetDataDto, IUsersGetAllDto } from './dto/get/model.dto';
-import { PersonsRepository } from './persons.repository';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { Injectable } from '@nestjs/common';
+
+import { PersonsRepository } from './persons.repository';
+import { IPersonsDataDTO } from './dto/get/model.dto';
 
 @Injectable()
 export class PersonsService {
-  constructor(
-    private readonly personsRepository: PersonsRepository,
-    private readonly authConfigsService: AuthConfigsService,
-    private readonly keycloakUserService: KeycloakUserService,
-  ) {}
+  constructor(private readonly personsRepository: PersonsRepository) {}
 
-  async findById(id: string): Promise<IPersonsGetDataDto> {
+  async findAll(pagination: IOffsetPagination) {
     try {
-      const { tenant } = this.authConfigsService.getUser();
-      const person = await this.personsRepository.findBy({
-        id,
-        AND: {
-          tenants: {
-            some: {
-              farmsId: tenant.farm.id,
-            },
-          },
-        },
-      });
-      const user = await this.keycloakUserService.findById(person.keycloakId);
-      return { ...IUsersGetAllDto.toIPersonsGetDataDto(user), id: person.id } as IPersonsGetDataDto;
+      const persons = await this.personsRepository.findAll(pagination);
+      return {
+        ...persons,
+        items: persons.items.map(person => IPersonsDataDTO.transform(person)),
+      };
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(
-    pagination: IOffsetPagination,
-  ): Promise<IOffsetPaginationResponse<Array<IPersonsGetDataDto>>> {
+  async findById(id: string) {
     try {
-      const { tenant } = this.authConfigsService.getUser();
-      const repositoryResponse = await this.personsRepository.findAll(pagination, {
-        tenants: {
-          some: {
-            farmsId: tenant.farm.id,
-          },
-        },
-      });
-      const items = await Promise.all(
-        repositoryResponse.items.map(async (person) => await this.findById(person.id)),
-      );
-      return { ...repositoryResponse, items } as IOffsetPaginationResponse<Array<IPersonsGetDataDto>>;
+      const person = await this.personsRepository.findBy({ id });
+      return IPersonsDataDTO.transform(person);
     } catch (error) {
       throw error;
     }

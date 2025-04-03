@@ -1,63 +1,38 @@
-import { commonExceptions } from '@/mappings/common-exceptions.mapping';
+import { Tenants } from 'prisma/prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
 
-class ITenantsMembersGetAllDto {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+import { IFarmsSelectDTO, IFarmsDataDTO } from '../../../farms/dto/get/model.dto';
+
+export class ITenantsSelectDTO implements Tenants {
+  clientId: string;
+  clientSecret: string;
+  createdAt: Date;
+  farm: IFarmsSelectDTO;
+  farmsId: string;
   id: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  keycloakId: string;
+  updatedAt: Date;
 }
 
-export class ITenantsGetAllDto {
+export class ITenantsDataDTO {
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  clientSecret: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   clientId: string;
 
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  id: string;
-
-  /*   @ApiProperty({ type: IFarmsGetAllDto })
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  farm: IFarmsGetAllDto; */
-
-  @ApiProperty({ type: ITenantsMembersGetAllDto, isArray: true })
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  members: Array<ITenantsMembersGetAllDto>;
-}
-
-export class ITenantsGetDataDto {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   clientSecret: string;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  clientId: string;
+  @ApiProperty({ type: IFarmsDataDTO })
+  farm: IFarmsDataDTO;
 
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   id: string;
 
-  /*  @ApiProperty({ type: IFarmsGetAllDto })
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  farm: IFarmsGetAllDto;
-
-  @ApiProperty({ type: IPersonsGetDataDto, isArray: true })
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  members: Array<IPersonsGetDataDto>; */
-}
-
-export class ITenantsGetByIdDto {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  id: string;
+  public static transform(tenant: ITenantsSelectDTO | null): ITenantsDataDTO {
+    if (!tenant) return null;
+    return {
+      farm: IFarmsDataDTO.transform(tenant.farm),
+      clientSecret: tenant.clientSecret,
+      clientId: tenant.clientId,
+      id: tenant.id,
+    };
+  }
 }

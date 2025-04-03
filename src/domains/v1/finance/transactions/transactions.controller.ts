@@ -1,16 +1,16 @@
 import { ApiDocMethodPaginated } from '@/decorators/swagger/api-doc-method-paginated.decorator';
 import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { Controller, UseGuards, Query, Body, Post, Get } from '@nestjs/common';
 import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
 import { AuthorizationGuard } from '@/guards/auth/authorization.guard';
-import { ITransactionsFindByIdDto } from './dto/param/model.dto';
-import { ITransactionsCreateDto } from './dto/body/model.dto';
-import { TransactionsService } from './transactions.service';
 import { roles } from '@/configs/mapping-roles/index.roles';
 import { Roles } from '@/decorators/roles/roles.decorator';
-import { ITransactionGetDataDto } from './dto/get/model';
 import { ApiTags } from '@nestjs/swagger';
+
+import { ITransactionsFindAllDTO } from './dto/param/model.dto';
+import { ITransactionsCreateDTO } from './dto/body/model.dto';
+import { TransactionsService } from './transactions.service';
+import { ITransactionDataDTO } from './dto/get/model';
 
 @ApiTags('Transactions')
 @Controller('v1/transactions')
@@ -18,28 +18,23 @@ import { ApiTags } from '@nestjs/swagger';
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  @Get('/product/:id')
+  @Post()
+  @Roles(roles.finance.transactions.create.name)
+  @ApiDocMethodPost({
+    description: roles.finance.transactions.create.description,
+    responseModel: ITransactionDataDTO,
+  })
+  async create(@Body() transactionsCreateDTO: ITransactionsCreateDTO) {
+    return await this.transactionsService.create(transactionsCreateDTO);
+  }
+
+  @Get()
   @Roles(roles.finance.transactions['findall-by-product'].name)
   @ApiDocMethodPaginated({
     description: roles.finance.transactions['findall-by-product'].description,
-    responseModel: ITransactionGetDataDto,
+    responseModel: ITransactionDataDTO,
   })
-  async findById(@Query() pagination: IOffsetPagination, @Param() params: ITransactionsFindByIdDto) {
-    return await this.transactionsService.findAll(pagination, params.id);
-  }
-
-  @Post()
-  @Roles(
-    roles.finance.transactions.create.name,
-    roles.administrative.products.findbyid.name,
-    roles.finance.transactionTypes.findbyid.name,
-    roles.administrative.products['update-values'].name,
-  )
-  @ApiDocMethodPost({
-    responseModel: ITransactionsCreateDto,
-    description: roles.finance.transactions.create.description,
-  })
-  async create(@Body() costCenterCreateDto: ITransactionsCreateDto) {
-    return await this.transactionsService.create(costCenterCreateDto);
+  async findById(@Query() query: ITransactionsFindAllDTO) {
+    return await this.transactionsService.findAll(query);
   }
 }

@@ -1,28 +1,23 @@
-import { IAuthAccessGetDto, IAuthRefreshGetDto } from './dto/get/model.dto';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
+
+import { IAuthRefreshGetDTO, IAuthAccessGetDTO } from './dto/get/model.dto';
 
 @Injectable()
 export class AuthRepository {
   constructor(private http: HttpService) {}
 
-  async siginWithKeycloakCredentials(
-    username: string,
-    password: string,
-    clientId: string,
-    clientSecret: string,
-  ) {
+  async refreshKeycloakToken(refreshToken: string, clientId: string, clientSecret: string) {
     try {
       return await lastValueFrom(
-        this.http.post<IAuthAccessGetDto>(
+        this.http.post<IAuthRefreshGetDTO>(
           `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
           new URLSearchParams({
+            refresh_token: refreshToken,
             client_secret: clientSecret,
-            grant_type: 'password',
+            grant_type: 'refresh_token',
             client_id: clientId,
-            username,
-            password,
           }),
         ),
       );
@@ -31,16 +26,17 @@ export class AuthRepository {
     }
   }
 
-  async resfreshKeycloakToken(refreshToken: string, clientId: string, clientSecret: string) {
+  async signinWithKeycloakCredentials(username: string, password: string, clientId: string, clientSecret: string) {
     try {
       return await lastValueFrom(
-        this.http.post<IAuthRefreshGetDto>(
+        this.http.post<IAuthAccessGetDTO>(
           `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
           new URLSearchParams({
-            refresh_token: refreshToken,
             client_secret: clientSecret,
-            grant_type: 'refresh_token',
+            grant_type: 'password',
             client_id: clientId,
+            username,
+            password,
           }),
         ),
       );

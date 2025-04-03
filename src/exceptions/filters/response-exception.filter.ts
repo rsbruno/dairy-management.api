@@ -8,8 +8,8 @@ export class ResponseExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const err = exception.getResponse() as any;
     response.status(exception.getStatus()).json({
-      errors: err.message ?? err,
       statusCode: exception.getStatus(),
+      errors: err.message ?? err,
     });
   }
 }

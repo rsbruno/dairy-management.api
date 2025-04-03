@@ -1,5 +1,5 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException, Injectable } from '@nestjs/common';
 import { IJWTGetDataDto } from '@/models/headers/model.dto';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
@@ -15,17 +15,17 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload) {
-    return payload;
-  }
-
   decodeToken(token: string): IJWTGetDataDto {
     try {
       const decoded = jwt.decode(token, { complete: true });
       if (!decoded) throw new UnauthorizedException(commonExceptions.http.unauthorized);
       return decoded as unknown as any;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException(commonExceptions.http.unauthorized);
     }
+  }
+
+  async validate(payload) {
+    return payload;
   }
 }

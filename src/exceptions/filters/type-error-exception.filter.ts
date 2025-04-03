@@ -1,4 +1,4 @@
-import { ExceptionFilter, ArgumentsHost, HttpStatus, Catch, Logger } from '@nestjs/common';
+import { ExceptionFilter, ArgumentsHost, HttpStatus, Logger, Catch } from '@nestjs/common';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { Response } from 'express';
 
@@ -11,12 +11,12 @@ export class TypeErrorExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const { method, url } = request;
     this.logger.error({
-      typeErrorName: exception.name,
-      messageException: exception.message,
       messageClient: commonExceptions.http.typeError,
+      messageException: exception.message,
+      typeErrorName: exception.name,
+      stack: exception.stack,
       method,
       url,
-      stack: exception.stack,
     });
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       errors: [{ message: commonExceptions.http.typeError }],

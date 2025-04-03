@@ -1,8 +1,3 @@
-import { IForbiddenRequestResponse } from '@/models/exceptions/forbidden-request-response/model';
-import { IBadRequestResponse } from '@/models/exceptions/bad-request-response/model';
-import { IApiDocMethodConfigs } from '@/models/exceptions/swagger-response/model';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
-import { applyDecorators, Type } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -12,6 +7,11 @@ import {
   getSchemaPath,
   ApiOperation,
 } from '@nestjs/swagger';
+import { IForbiddenRequestResponse } from '@/models/exceptions/forbidden-request-response/model';
+import { IBadRequestResponse } from '@/models/exceptions/bad-request-response/model';
+import { IApiDocMethodConfigs } from '@/models/exceptions/swagger-response/model';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { applyDecorators, Type } from '@nestjs/common';
 
 export function ApiDocMethodPaginated<DataDto extends Type<unknown>>(configs: IApiDocMethodConfigs<DataDto>) {
   const decorators = [
@@ -26,8 +26,8 @@ export function ApiDocMethodPaginated<DataDto extends Type<unknown>>(configs: IA
           {
             properties: {
               items: {
-                type: 'array',
                 items: { $ref: getSchemaPath(configs.responseModel) },
+                type: 'array',
               },
               total: {
                 type: 'number',

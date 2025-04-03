@@ -1,7 +1,8 @@
 import { ExceptionFilter, ArgumentsHost, HttpStatus, Logger, Catch } from '@nestjs/common';
 import { businessException } from '@/mappings/business-exception.mapping';
-import { CustomBusinessException } from '../custom-business.exception';
 import { Response } from 'express';
+
+import { CustomBusinessException } from '../custom-business.exception';
 
 @Catch(CustomBusinessException)
 export class CustomBusinessExceptionFilter implements ExceptionFilter {
@@ -12,7 +13,7 @@ export class CustomBusinessExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const { method, url } = request;
-    const { message, statusCode } = businessException[exception.code];
+    const { statusCode, message } = businessException[exception.code];
     this.logger.error({
       messageException: message,
       messageClient: message,
@@ -20,8 +21,8 @@ export class CustomBusinessExceptionFilter implements ExceptionFilter {
       url,
     });
     response.status(statusCode ?? HttpStatus.BAD_REQUEST).json({
-      errors: [{ message }],
       statusCode: statusCode ?? HttpStatus.BAD_REQUEST,
+      errors: [{ message }],
     });
   }
 }

@@ -1,15 +1,16 @@
 import { ApiDocMethodPaginated } from '@/decorators/swagger/api-doc-method-paginated.decorator';
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
 import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, UseGuards, Param, Query, Get } from '@nestjs/common';
 import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
 import { AuthorizationGuard } from '@/guards/auth/authorization.guard';
 import { roles } from '@/configs/mapping-roles/index.roles';
-import { IPersonsFindByIdDto } from './dto/param/model.dto';
 import { Roles } from '@/decorators/roles/roles.decorator';
-import { IPersonsGetDataDto } from './dto/get/model.dto';
-import { PersonsService } from './persons.service';
 import { ApiTags } from '@nestjs/swagger';
+
+import { IPersonsFindByIdDTO } from './dto/param/model.dto';
+import { IPersonsDataDTO } from './dto/get/model.dto';
+import { PersonsService } from './persons.service';
 
 @ApiTags('Persons')
 @Controller('v1/persons')
@@ -21,7 +22,7 @@ export class PersonsController {
   @Roles(roles.identity.persons.findall.name)
   @ApiDocMethodPaginated({
     description: roles.identity.persons.findall.description,
-    responseModel: IPersonsGetDataDto,
+    responseModel: IPersonsDataDTO,
   })
   async findAll(@Query() query: IOffsetPagination) {
     return this.personsService.findAll(query);
@@ -31,9 +32,9 @@ export class PersonsController {
   @Roles(roles.identity.persons.findbyid.name)
   @ApiDocMethodGet({
     description: roles.identity.persons.findbyid.description,
-    responseModel: IPersonsGetDataDto,
+    responseModel: IPersonsDataDTO,
   })
-  async findById(@Param() params: IPersonsFindByIdDto) {
+  async findById(@Param() params: IPersonsFindByIdDTO) {
     return this.personsService.findById(params.id);
   }
 }

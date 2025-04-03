@@ -4,7 +4,7 @@ export const transactionsTypesEnum = {
     code: 'income',
   },
   expense: {
-    name: 'Saída',
     code: 'expense',
+    name: 'Saída',
   },
 };

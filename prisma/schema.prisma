@@ -11,10 +11,12 @@ model Persons {
   id          String         @id @default(cuid())
   keycloakId  String         @unique
   username    String         @unique
+  fullName    String         @default("")
+  enabled     Boolean        @default(true)
   tenants     Tenants[]
+  transaction Transactions[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  Transaction Transactions[]
 
   @@map("persons")
 }
@@ -37,41 +39,45 @@ model Farms {
   name              String
   cnpj              String              @unique
   Tenants           Tenants?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
   CostCenter        CostCenter[]
   products          Products[]
-  Transactions      Transactions[]
-  TransactionsTypes TransactionsTypes[]
-  MeasurementUnits  MeasurementUnits[]
+  transactions      Transactions[]
+  transactionsTypes TransactionsTypes[]
+  measurementUnits  MeasurementUnits[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
   @@map("farms")
 }
 
 model CostCenter {
-  id          String     @id @default(cuid())
-  name        String     @db.VarChar(100)
-  description String?    @db.VarChar(200)
-  farmId      String
-  farm        Farms      @relation(fields: [farmId], references: [id])
-  products    Products[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id               String         @id @default(cuid())
+  name             String         @db.VarChar(100)
+  description      String?        @db.VarChar(200)
+  code             String?        @unique @db.VarChar(20)
+  farm             Farms          @relation(fields: [farmId], references: [id])
+  farmId           String
+  transactions     Transactions[]
+  childCostCenters CostCenter[]   @relation("ParentCostCenter")
+  parentId         String?
+  parent           CostCenter?    @relation("ParentCostCenter", fields: [parentId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
-  @@map("costCenter")
+  @@map("cost_center")
 }
 
 model Products {
-  id           String         @id @default(cuid())
-  name         String         @db.VarChar(100)
-  description  String?        @db.VarChar(200)
-  quantity     Float
-  unitPrice    Float
-  costCenter   CostCenter?    @relation(fields: [costCenterId], references: [id])
-  costCenterId String?
-  farm         Farms?         @relation(fields: [farmId], references: [id])
-  farmId       String?
-  Transaction  Transactions[]
+  id                String           @id @default(cuid())
+  name              String           @db.VarChar(100)
+  description       String?          @db.VarChar(200)
+  farm              Farms            @relation(fields: [farmId], references: [id])
+  farmId            String
+  transaction       Transactions[]
+  measurementUnit   MeasurementUnits @relation(fields: [measurementUnitId], references: [id])
+  measurementUnitId String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   @@map("products")
 }
@@ -89,8 +95,9 @@ model Transactions {
   farmId        String
   type          TransactionsTypes @relation(fields: [typeId], references: [id])
   typeId        String
+  costCenter    CostCenter?       @relation(fields: [costCenterId], references: [id])
+  costCenterId  String?
   createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
 
   @@map("transactions")
 }
@@ -98,24 +105,27 @@ model Transactions {
 model TransactionsTypes {
   id           String         @id @default(cuid())
   name         String         @db.VarChar(100)
-  code         String         @unique @db.VarChar(100)
+  code         String         @unique @db.VarChar(20)
   transactions Transactions[]
-  farm         Farms          @relation(fields: [farmId], references: [id])
-  farmId       String
+  farm         Farms?         @relation(fields: [farmId], references: [id])
+  farmId       String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
   @@map("transactions_types")
 }
 
 model MeasurementUnits {
-  id             String   @id @default(cuid())
+  id             String     @id @default(cuid())
   name           String
   code           String
-  farm           Farms?   @relation(fields: [farmId], references: [id])
+  farm           Farms?     @relation(fields: [farmId], references: [id])
   farmId         String?
   baseUnit       String
   conversionRate Float
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  products       Products[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   @@map("measurement_units")
 }

@@ -1,9 +1,19 @@
-import { commonExceptions } from '@/mappings/common-exceptions.mapping';
+import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
-export class ITransactionsFindByIdDto {
+export class ITransactionsFindAllDTO extends IOffsetPagination {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  costCenterId: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  productId: string;
+}
+
+export class ITransactionsFindByIdDTO {
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsOptional()
   id: string;
 }

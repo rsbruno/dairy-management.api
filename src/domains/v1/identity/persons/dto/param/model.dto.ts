@@ -2,7 +2,7 @@ import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class IPersonsFindByIdDto {
+export class IPersonsFindByIdDTO {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   id: string;

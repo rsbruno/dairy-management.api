@@ -1,63 +1,58 @@
-import { IOffsetPagination, IOffsetPaginationResponse } from '@/models/pagination/offset-pagination/model';
+import { IOffsetPaginationResponse, IOffsetPagination } from '@/models/pagination/offset-pagination/model';
+import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { IMeasurementUnitsResponseDto } from './dto/get/model';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+import { IMeasurementUnitsSelectDTO } from './dto/get/model';
+
 @Injectable()
 export class MeasurementUnitsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  private selectQueryProducts = { conversionRate: true, baseUnit: true, code: true, name: true, id: true };
 
-  async findBy(where: Prisma.MeasurementUnitsWhereInput): Promise<IMeasurementUnitsResponseDto> {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authConfigsService: AuthConfigsService,
+  ) {}
+
+  async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<Array<IMeasurementUnitsSelectDTO>>> {
     try {
-      const response = await this.prisma.measurementUnits.findFirstOrThrow({
-        where,
-        select: {
-          conversionRate: true,
-          baseUnit: true,
-          code: true,
-          name: true,
-          id: true,
-        },
+      const paginateService = new IOffsetPagination<IMeasurementUnitsSelectDTO>(this.prisma, pagination);
+      return await paginateService.paginate('MeasurementUnits', {
+        where: { ...this.mountMeasurementUnitsWhereInput() },
+        select: this.selectQueryProducts,
       });
-      return response;
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(
-    pagination: IOffsetPagination,
-    farmId: string,
-  ): Promise<IOffsetPaginationResponse<Array<IMeasurementUnitsResponseDto>>> {
+  async findBy(where: Prisma.MeasurementUnitsWhereInput): Promise<IMeasurementUnitsSelectDTO> {
     try {
-      const paginateService = new IOffsetPagination(this.prisma, pagination);
-      const response = await paginateService.paginate('MeasurementUnits', {
-        where: {
-          OR: [
-            {
-              farmId: {
-                equals: null,
-              },
-            },
-            {
-              farm: {
-                id: farmId,
-              },
-            },
-          ],
-        },
-        select: {
-          conversionRate: true,
-          baseUnit: true,
-          code: true,
-          name: true,
-          id: true,
-        },
-      });
-      return response as unknown as IOffsetPaginationResponse<Array<IMeasurementUnitsResponseDto>>;
+      return (await this.prisma.measurementUnits.findFirstOrThrow({
+        where: { ...this.mountMeasurementUnitsWhereInput(), ...where },
+        select: this.selectQueryProducts,
+      })) as unknown as IMeasurementUnitsSelectDTO;
     } catch (error) {
       throw error;
     }
+  }
+
+  private mountMeasurementUnitsWhereInput() {
+    const { tenant } = this.authConfigsService.getUser();
+    return {
+      OR: [
+        {
+          farmId: {
+            equals: null,
+          },
+        },
+        {
+          farm: {
+            id: tenant.farm.id,
+          },
+        },
+      ],
+    };
   }
 }

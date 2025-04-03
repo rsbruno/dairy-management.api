@@ -1,16 +1,16 @@
-import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
+import { HttpStatus } from '@nestjs/common';
 
 class IForbiddenErrors {
-  @ApiProperty({
-    isArray: true,
-  })
-  roles: string;
-
   @ApiProperty({
     example: 'usuário sem as permissões!',
   })
   message: string;
+
+  @ApiProperty({
+    isArray: true,
+  })
+  roles: string;
 }
 
 export class IForbiddenRequestResponse {

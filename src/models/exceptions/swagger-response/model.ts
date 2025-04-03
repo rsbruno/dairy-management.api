@@ -1,6 +1,6 @@
-export class IApiDocMethodConfigs<T = any> {
+export class IApiDocMethodConfigs<T = {}> {
   description: string;
-  responseModel?: T;
-  isPublic?: boolean;
   isArray?: boolean;
+  isPublic?: boolean;
+  responseModel?: T;
 }

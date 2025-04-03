@@ -1,7 +1,8 @@
 import { ArgumentMetadata, PipeTransform, Injectable } from '@nestjs/common';
-import { CustomValidatorException } from '../custom-validator.exception';
 import { ValidationError, validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+
+import { CustomValidatorException } from '../custom-validator.exception';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
@@ -19,9 +20,9 @@ export class ValidationPipe implements PipeTransform<any> {
         const path = parentPath ? `${parentPath}.${error.property}` : error.property;
         if (error.constraints)
           acc.push(
-            ...Object.values(error.constraints).map((message) => ({
-              path,
+            ...Object.values(error.constraints).map(message => ({
               message,
+              path,
             })),
           );
         if (error.children && error.children.length > 0) acc.push(...collectErrors(error.children, path));

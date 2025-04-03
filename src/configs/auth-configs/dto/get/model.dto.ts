@@ -1,33 +1,12 @@
-import { ITenantsGetAllDto } from '@/domains/v1/administrative/tenants/dto/get/model.dto';
-import { IPersonsGetDataDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
+import { ITenantsDataDTO } from '@/domains/v1/administrative/tenants/dto/get/model.dto';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class IAuthConfigsUserGetAllDto extends IPersonsGetDataDto {
+export class IAuthConfigsUserGetAllDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   keycloakId: string;
-}
-
-class ITenantsMembersGetAllDto {
-  id: string;
-  keycloakId: string;
-  username: string;
-}
-
-class ITenantsFarmGetAllDto {
-  id: string;
-  name: string;
-  cnpj: string;
-}
-
-export class IAuthConfigsTenantsGetAllDto extends ITenantsGetAllDto {
-  clientSecret: string;
-  clientId: string;
-  id: string;
-  farm: ITenantsFarmGetAllDto;
-  members: Array<ITenantsMembersGetAllDto>;
 }
 
 export class IAuthConfigsUserGetDataDto {
@@ -35,10 +14,10 @@ export class IAuthConfigsUserGetDataDto {
   info?: IAuthConfigsUserGetAllDto;
 
   @ApiProperty()
-  tenant?: IAuthConfigsTenantsGetAllDto;
+  roles?: IRolesGetDataDto[];
 
   @ApiProperty()
-  roles?: IRolesGetDataDto[];
+  tenant?: ITenantsDataDTO;
 }
 
 export class IGroupsGetDataDto {
@@ -61,22 +40,25 @@ export class IGroupsGetDataDto {
 
 class IGroupsGetAllAccessDto {
   @ApiProperty()
-  view: boolean;
-
-  @ApiProperty()
-  viewMembers: boolean;
+  manage: boolean;
 
   @ApiProperty()
   manageMembers: boolean;
 
   @ApiProperty()
-  manage: boolean;
+  manageMembership: boolean;
 
   @ApiProperty()
-  manageMembership: boolean;
+  view: boolean;
+
+  @ApiProperty()
+  viewMembers: boolean;
 }
 
 export class IGroupsGetAllDto {
+  @ApiProperty({ type: IGroupsGetAllAccessDto })
+  access: IGroupsGetAllAccessDto;
+
   @ApiProperty()
   id: string;
 
@@ -92,9 +74,6 @@ export class IGroupsGetAllDto {
   @ApiProperty()
   subGroups: Array<any>;
 
-  @ApiProperty({ type: IGroupsGetAllAccessDto })
-  access: IGroupsGetAllAccessDto;
-
   static toIGroupsGetDataDto(data: IGroupsGetAllDto): IGroupsGetDataDto {
     return {
       subGroupCount: data.subGroupCount,
@@ -108,11 +87,7 @@ export class IGroupsGetAllDto {
 export class IRolesGetDataDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
-  id: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
-  name: string;
+  containerId: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
@@ -120,27 +95,31 @@ export class IRolesGetDataDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
-  containerId: string;
+  id: string;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })
+  name: string;
 }
 
 export class IRolesGetAllDto {
   @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  description: string;
+  clientRole: boolean;
 
   @ApiProperty()
   composite: boolean;
 
   @ApiProperty()
-  clientRole: boolean;
+  containerId: string;
 
   @ApiProperty()
-  containerId: string;
+  description: string;
+
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
 
   public static toIRolesDataGetDto(data: IRolesGetAllDto): IRolesGetDataDto {
     return {

@@ -1,32 +1,32 @@
-import { IPersonsRolesGetDataDto, IUsersGetAllDto } from '@/domains/v1/identity/persons/dto/get/model.dto';
-import { KeycloakUserRepository } from './keycloak-user.repository';
 import { Injectable } from '@nestjs/common';
+
+import { KeycloakUserRepository } from './keycloak-user.repository';
 
 @Injectable()
 export class KeycloakUserService {
   constructor(private readonly keycloakUserRepository: KeycloakUserRepository) {}
 
-  async findAssignedRoles(keycloakId: string): Promise<Array<IPersonsRolesGetDataDto>> {
+  async findAssignedRoles(keycloakId: string): Promise<Array<any>> {
     try {
       const { data: groups } = await this.keycloakUserRepository.findAssignedGroups(keycloakId);
       const [{ data }] = await Promise.all(
-        groups.map(async (group) => await this.keycloakUserRepository.findAssignedRolesByGroup(group.id)),
+        groups.map(async group => await this.keycloakUserRepository.findAssignedRolesByGroup(group.id)),
       );
       if (!data && !data?.realmMappings) return [];
       return data?.realmMappings.map(
-        (role) =>
+        role =>
           ({
             description: role.description,
             name: role.name,
             id: role.id,
-          }) as IPersonsRolesGetDataDto,
+          }) as any,
       );
     } catch (error) {
       throw error;
     }
   }
 
-  async findById(id: string): Promise<IUsersGetAllDto> {
+  async findById(id: string): Promise<any> {
     try {
       const { data } = await this.keycloakUserRepository.findById(id);
       return data;

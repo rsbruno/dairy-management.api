@@ -11,7 +11,7 @@ async function transactions_types() {
           ...transactionsType,
           farm: {
             connect: {
-              id: 'cm2c8elk1000111n2hy4hpkde',
+              id: 'cm8q9nog10001e5ypjl4ze26r',
             },
           },
         }) as any,

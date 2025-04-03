@@ -1,8 +1,9 @@
-import { TenantsService } from '../../administrative/tenants/tenants.service';
-import { IAuthAccessGetDto, IAuthRefreshGetDto } from './dto/get/model.dto';
 import { JwtStrategyService } from '@/configs/jwt/jwt.service';
-import { AuthRepository } from './auth.repository';
 import { Injectable } from '@nestjs/common';
+
+import { TenantsService } from '../../administrative/tenants/tenants.service';
+import { IAuthRefreshGetDTO, IAuthAccessGetDTO } from './dto/get/model.dto';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
 export class AuthService {
@@ -12,28 +13,28 @@ export class AuthService {
     private readonly authRepository: AuthRepository,
   ) {}
 
-  async siginWithKeycloakCredentials(username: string, password: string): Promise<IAuthAccessGetDto> {
+  async refreshKeycloakToken(refreshToken: string): Promise<IAuthRefreshGetDTO> {
     try {
-      const { clientId, clientSecret } = await this.tenantsService.findAssignedTenants(username);
+      const token = this.jwtStrategyService.decodeToken(refreshToken);
+      const { clientSecret, clientId } = await this.tenantsService.findBy({
+        clientId: token.payload.azp,
+      });
       const {
-        data: { access_token, refresh_token },
-      } = await this.authRepository.siginWithKeycloakCredentials(username, password, clientId, clientSecret);
-      return { access_token, refresh_token } as IAuthAccessGetDto;
+        data: { access_token },
+      } = await this.authRepository.refreshKeycloakToken(refreshToken, clientId, clientSecret);
+      return { access_token } as IAuthRefreshGetDTO;
     } catch (error) {
       throw error;
     }
   }
 
-  async resfreshKeycloakToken(refreshToken: string): Promise<IAuthRefreshGetDto> {
+  async signinWithKeycloakCredentials(username: string, password: string): Promise<IAuthAccessGetDTO> {
     try {
-      const token = this.jwtStrategyService.decodeToken(refreshToken);
-      const { clientId, clientSecret } = await this.tenantsService.findBy({
-        clientId: token.payload.azp,
-      });
+      const { clientSecret, clientId } = await this.tenantsService.findAssignedTenants(username);
       const {
-        data: { access_token },
-      } = await this.authRepository.resfreshKeycloakToken(refreshToken, clientId, clientSecret);
-      return { access_token } as IAuthRefreshGetDto;
+        data: { refresh_token, access_token },
+      } = await this.authRepository.signinWithKeycloakCredentials(username, password, clientId, clientSecret);
+      return { refresh_token, access_token } as IAuthAccessGetDTO;
     } catch (error) {
       throw error;
     }

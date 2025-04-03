@@ -1,8 +1,8 @@
 import { ValidationError } from 'class-validator';
 
 export class CustomValidatorException extends ValidationError {
-  message: 'error field forms';
   errors: any;
+  message: 'error field forms';
   constructor(error: any) {
     super();
     this.errors = error;

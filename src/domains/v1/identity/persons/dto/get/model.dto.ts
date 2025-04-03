@@ -1,145 +1,43 @@
-import { IKeycloakPaginationGetDto } from '@/models/pagination/keycloak/model';
+import { ITenantsSelectDTO } from '@/domains/v1/administrative/tenants/dto/get/model.dto';
+import { IFarmsDataDTO } from '@/domains/v1/administrative/farms/dto/get/model.dto';
+import { Persons } from 'prisma/prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
 
-export class IPersonskeycloakFindAllDto extends IKeycloakPaginationGetDto {
-  @ApiProperty({
-    required: false,
-  })
-  @IsOptional()
-  search: string;
-}
-
-class IUsersGetAllAccessDto {
-  @ApiProperty()
-  manageGroupMembership: boolean;
-
-  @ApiProperty()
-  impersonate: boolean;
-
-  @ApiProperty()
-  mapRoles: boolean;
-
-  @ApiProperty()
-  manage: boolean;
-
-  @ApiProperty()
-  view: boolean;
-}
-
-export class IUsersGetAllDto {
-  @ApiProperty()
-  disableableCredentialTypes: Array<string>;
-
-  @ApiProperty({ type: [String] })
-  requiredActions: Array<string>;
-
-  @ApiProperty()
-  createdTimestamp: number;
-
-  @ApiProperty()
-  emailVerified: boolean;
-
-  @ApiProperty()
-  notBefore: number;
-
-  @ApiProperty()
-  firstName: string;
-
-  @ApiProperty()
-  lastName: string;
-
-  @ApiProperty()
+export class IPersonsSelectDTO implements Persons {
+  createdAt: Date;
+  enabled: boolean;
+  fullName: string;
+  id: string;
+  keycloakId: string;
+  tenants: Array<ITenantsSelectDTO>;
+  updatedAt: Date;
   username: string;
+}
 
+export class IPersonsDataDTO {
   @ApiProperty()
   enabled: boolean;
 
-  @ApiProperty()
-  access: IUsersGetAllAccessDto;
+  @ApiProperty({ type: IFarmsDataDTO, isArray: true })
+  farms: Array<IFarmsDataDTO>;
 
   @ApiProperty()
-  totp: boolean;
-
-  @ApiProperty()
-  email: string;
+  fullName: string;
 
   @ApiProperty()
   id: string;
 
-  static toIPersonsGetDataDto(data: IUsersGetAllDto): IPersonsGetDataDto {
+  @ApiProperty()
+  username: string;
+
+  public static transform(person: IPersonsSelectDTO | null): IPersonsDataDTO {
+    if (!person) return null;
     return {
-      createdTimestamp: data.createdTimestamp,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      enabled: data.enabled,
-      email: data.email,
-      id: data.id,
+      farms: person.tenants.map(tenant => IFarmsDataDTO.transform(tenant.farm)),
+      username: person.username,
+      fullName: person.fullName,
+      enabled: person.enabled,
+      id: person.id,
     };
   }
-}
-
-export class IPersonsGetDataDto {
-  @ApiProperty()
-  createdTimestamp: number;
-
-  @ApiProperty()
-  firstName: string;
-
-  @ApiProperty()
-  lastName: string;
-
-  @ApiProperty()
-  username: string;
-
-  @ApiProperty()
-  enabled: boolean;
-
-  @ApiProperty()
-  email: string;
-
-  @ApiProperty()
-  id: string;
-}
-
-export class IPersonsGetAllDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  keycloakId: string;
-
-  @ApiProperty()
-  username: string;
-}
-
-export class IPersonsGroupsGetAllDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  path: string;
-
-  @ApiProperty()
-  @IsOptional()
-  parentId: string;
-}
-
-export class IPersonsRolesGetAllDto {
-  realmMappings: Array<IPersonsRolesGetDataDto>;
-}
-
-export class IPersonsRolesGetDataDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  description: string;
 }

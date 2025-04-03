@@ -1,6 +1,6 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { PrismaService } from '@/configs/database/prisma.service';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsInt, Min } from 'class-validator';
@@ -36,12 +36,7 @@ export class IOffsetPaginationResponse<T = any[]> {
   }
 }
 
-export class IOffsetPagination<R = Array<{}>> {
-  constructor(
-    private prisma: PrismaService,
-    private pagination: IOffsetPagination,
-  ) {}
-
+export class IOffsetPagination<R = {}> {
   @ApiProperty({
     required: false,
     default: 10,
@@ -60,18 +55,19 @@ export class IOffsetPagination<R = Array<{}>> {
   @Min(1, { message: commonExceptions.param.isMinValue['1'] })
   page?: number = 1;
 
-  private capitalizeFirstLetter(model: string): Prisma.ModelName {
-    return (model.charAt(0).toLowerCase() + model.slice(1)) as Prisma.ModelName;
-  }
+  constructor(
+    private prisma: PrismaService,
+    private pagination: IOffsetPagination,
+  ) {}
 
   async paginate<T extends keyof PrismaClient>(model: Prisma.ModelName, options?: PrismaMethods[T]) {
     const offsetSalt = (this.pagination.page! - 1) * this.pagination.max;
     const args = {
-      take: Number(this.pagination.max),
-      skip: offsetSalt,
       orderBy: {
         id: 'asc',
       },
+      take: Number(this.pagination.max),
+      skip: offsetSalt,
       ...options,
     } as PrismaMethods[T];
     const response = await this.prisma.$transaction([
@@ -83,6 +79,12 @@ export class IOffsetPagination<R = Array<{}>> {
         skip: args.skip,
       }),
     ]);
-    return new IOffsetPaginationResponse<R>(response).JsonResponse();
+    return new IOffsetPaginationResponse<Array<R>>(response).JsonResponse() as Promise<
+      IOffsetPaginationResponse<Array<R>>
+    >;
+  }
+
+  private capitalizeFirstLetter(model: string): Prisma.ModelName {
+    return (model.charAt(0).toLowerCase() + model.slice(1)) as Prisma.ModelName;
   }
 }
