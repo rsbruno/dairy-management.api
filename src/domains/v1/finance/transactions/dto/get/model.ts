@@ -1,5 +1,6 @@
 import { ITransactionsSelectDTO, ITransactionsDataDTO } from '@/domains/v1/parameters/transactions-types/dto/get/model';
 import { ICostCenterSelectDTO, ICostCenterDataDTO } from '@/domains/v1/parameters/cost-center/dto/get/model';
+import { IPersonsSelectDTO, IPersonsDataDTO } from '@/domains/v1/identity/persons/dto/get/model.dto';
 import { IProductsSelectDTO, IProductsDataDTO } from '@/domains/v1/stock/products/dto/get/model';
 import { Transactions } from 'prisma/prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
@@ -14,6 +15,7 @@ export class ITransactionSelectDTO implements Transactions {
   product: IProductsSelectDTO;
   productId: string;
   quantity: number;
+  responsible: IPersonsSelectDTO;
   responsibleId: string;
   type: ITransactionsSelectDTO;
   typeId: string;
@@ -23,6 +25,9 @@ export class ITransactionSelectDTO implements Transactions {
 export class ITransactionDataDTO {
   @ApiProperty()
   costCenter: ICostCenterDataDTO;
+
+  @ApiProperty()
+  createdAt: Date;
 
   @ApiProperty()
   description: string;
@@ -37,6 +42,9 @@ export class ITransactionDataDTO {
   quantity: number;
 
   @ApiProperty()
+  responsible: IPersonsDataDTO;
+
+  @ApiProperty()
   type: ITransactionsDataDTO;
 
   @ApiProperty()
@@ -46,9 +54,11 @@ export class ITransactionDataDTO {
     if (!transaction) return null;
     return {
       costCenter: ICostCenterDataDTO.toICostCenterDataDTO(transaction.costCenter),
+      responsible: IPersonsDataDTO.transform(transaction.responsible),
       product: IProductsDataDTO.transform(transaction.product),
       type: ITransactionsDataDTO.transform(transaction.type),
       description: transaction.description,
+      createdAt: transaction.createdAt,
       unitPrice: transaction.unitPrice,
       quantity: transaction.quantity,
       id: transaction.id,

@@ -72,12 +72,7 @@ export class IOffsetPagination<R = {}> {
     } as PrismaMethods[T];
     const response = await this.prisma.$transaction([
       this.prisma?.[this.capitalizeFirstLetter(model)]?.findMany(args as PrismaMethods[T]),
-      this.prisma?.[this.capitalizeFirstLetter(model)]?.count({
-        where: args.where ?? {},
-        orderBy: args.orderBy,
-        take: args.take,
-        skip: args.skip,
-      }),
+      this.prisma?.[this.capitalizeFirstLetter(model)]?.count({ where: args.where ?? {} }),
     ]);
     return new IOffsetPaginationResponse<Array<R>>(response).JsonResponse() as Promise<
       IOffsetPaginationResponse<Array<R>>

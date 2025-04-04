@@ -18,8 +18,8 @@ export class IPersonsDataDTO {
   @ApiProperty()
   enabled: boolean;
 
-  @ApiProperty({ type: IFarmsDataDTO, isArray: true })
-  farms: Array<IFarmsDataDTO>;
+  @ApiProperty({ type: IFarmsDataDTO, required: false, isArray: true })
+  farms?: Array<IFarmsDataDTO>;
 
   @ApiProperty()
   fullName: string;
@@ -32,12 +32,14 @@ export class IPersonsDataDTO {
 
   public static transform(person: IPersonsSelectDTO | null): IPersonsDataDTO {
     if (!person) return null;
-    return {
-      farms: person.tenants.map(tenant => IFarmsDataDTO.transform(tenant.farm)),
+    const farms = person?.tenants?.map(tenant => IFarmsDataDTO.transform(tenant.farm)) ?? [];
+    const response: IPersonsDataDTO = {
       username: person.username,
       fullName: person.fullName,
       enabled: person.enabled,
       id: person.id,
     };
+    if (farms.length > 0) response.farms = farms;
+    return response;
   }
 }

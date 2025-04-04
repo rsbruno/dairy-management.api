@@ -2,6 +2,7 @@ import { IOffsetPaginationResponse, IOffsetPagination } from '@/models/paginatio
 import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
 import { PrismaService } from '@/configs/database/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { ITransactionsFindAllDTO } from './dto/param/model.dto';
 import { ITransactionsCreateDTO } from './dto/body/model.dto';
@@ -12,11 +13,14 @@ export class TransactionsRepository {
   private selectQueryTransactions = {
     product: { include: { measurementUnit: true } },
     costCenter: { include: { parent: true } },
+    responsible: true,
+    description: true,
+    createdAt: true,
     unitPrice: true,
     quantity: true,
     type: true,
     id: true,
-  };
+  } as Prisma.TransactionsSelect;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -70,11 +74,21 @@ export class TransactionsRepository {
       const paginateService = new IOffsetPagination<ITransactionSelectDTO>(this.prisma, query);
       return await paginateService.paginate('Transactions', {
         where: {
+          createdAt: {
+            gte: query.startDate,
+            lte: query.endDate,
+          },
+          responsible: query.responsibleId && {
+            id: query.responsibleId,
+          },
           costCenter: query.costCenterId && {
             id: query.costCenterId,
           },
           product: query.productId && {
             id: query.productId,
+          },
+          type: query.typeId && {
+            id: query.typeId,
           },
           farm: {
             id: tenant.farm.id,

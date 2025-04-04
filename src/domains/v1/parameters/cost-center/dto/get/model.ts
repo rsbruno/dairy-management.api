@@ -20,17 +20,18 @@ export class ICostCenterDataDTO {
   @ApiProperty()
   name: string;
 
-  @ApiProperty({ type: () => Object, nullable: true })
-  parent: ICostCenterDataDTO | null;
+  @ApiProperty({ type: () => Object, required: false, nullable: true })
+  parent?: ICostCenterDataDTO | null;
 
   public static toICostCenterDataDTO(costCenter: ICostCenterSelectDTO | null): ICostCenterDataDTO {
     if (!costCenter) return null;
-    return {
-      parent: ICostCenterDataDTO.toICostCenterDataDTO(costCenter.parent),
+    const response: ICostCenterDataDTO = {
       description: handlerNullableStrings(costCenter.name),
       code: handlerNullableStrings(costCenter.code),
       name: costCenter.name,
       id: costCenter.id,
     };
+    if (costCenter.parent) response.parent = ICostCenterDataDTO.toICostCenterDataDTO(costCenter.parent);
+    return response;
   }
 }
