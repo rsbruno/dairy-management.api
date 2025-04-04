@@ -29,9 +29,9 @@ export class TransactionsController {
   }
 
   @Get()
-  @Roles(roles.finance.transactions['findall-by-product'].name)
+  @Roles(roles.finance.transactions.findAll.name)
   @ApiDocMethodPaginated({
-    description: roles.finance.transactions['findall-by-product'].description,
+    description: roles.finance.transactions.findAll.description,
     responseModel: ITransactionDataDTO,
   })
   async findById(@Query() query: ITransactionsFindAllDTO) {

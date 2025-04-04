@@ -1,46 +1,68 @@
 export const roles = {
-  finance: {
-    costcenter: {
+  parameters: {
+    costCenter: {
       findall: {
         description: 'Lista todos os centros de custo',
-        name: 'ADM-COST_CENTER-FIND_ALL',
+        name: 'PRM-COST_CENTER-FIND_ALL',
       },
       findbyid: {
         description: 'Busca um centro pelo id',
-        name: 'ADM-COST_CENTER-FIND_BY_ID',
+        name: 'PRM-COST_CENTER-FIND_BY_ID',
       },
       create: {
         description: 'Adiciona um centro de custo',
-        name: 'ADM-COST_CENTER-CREATE',
+        name: 'PRM-COST_CENTER-CREATE',
+      },
+    },
+    measurementUnits: {
+      findbyid: {
+        description: 'Busca uma unidade de medida pelo id',
+        name: 'PRM-MEASUREMENT_UNITS-FIND_BY_ID',
+      },
+      findall: {
+        description: 'Lista todas as unidades de medida',
+        name: 'PRM-MEASUREMENT_UNITS-FIND_ALL',
       },
     },
     transactionTypes: {
       findbyid: {
         description: 'Busca um tipo de transação pelo id',
-        name: 'ADM-TRANSACTION_TYPES-FIND_BY_ID',
+        name: 'PRM-TRANSACTION_TYPES-FIND_BY_ID',
       },
       findall: {
         description: 'Lista todos os tipos de transações',
-        name: 'ADM-TRANSACTION_TYPES-FIND_ALL',
+        name: 'PRM-TRANSACTION_TYPES-FIND_ALL',
+      },
+    },
+  },
+  finance: {
+    balance: {
+      costCenter: {
+        description: 'Lista o balanço de gastos por centro de custos da fazenda',
+        name: 'FNC-BALANCE-COST_CENTER',
+      },
+      grossIncome: {
+        description: 'Lista o balanço de receitas da fazenda',
+        name: 'FNC-BALANCE-GROSS_INCOME',
+      },
+      grossExpense: {
+        description: 'Lista o balanço de gastos da fazenda',
+        name: 'FNC-BALANCE-GROSS_EXPENSE',
       },
     },
     transactions: {
-      'findall-by-product': {
-        description: 'Lista todas as transações de um produto',
-        name: 'ADM-TRANSACTION_PRODUCT-FIND_ALL',
+      findAll: {
+        description: 'Lista todas as transações',
+        name: 'FNC-TRANSACTION-FIND_ALL',
       },
       create: {
         description: 'Adiciona uma transação',
-        name: 'ADM-TRANSACTION-CREATE',
+        name: 'FNC-TRANSACTION-CREATE',
       },
     },
   },
   stocks: {
     products: {
-      'update-values': {
-        description: 'Atualiza os valores de um produto',
-        name: 'STK-PRODUCTS-UPDATE_VALUES',
-      },
       findbyid: {
         description: 'Busca um produto pelo id',
         name: 'STK-PRODUCTS-FIND_BY_ID',
@@ -68,18 +90,6 @@ export const roles = {
       create: {
         description: 'Adiciona uma pessoa',
         name: 'IDT-PERSON-CREATE',
-      },
-    },
-  },
-  parameters: {
-    measurementUnits: {
-      findbyid: {
-        description: 'Busca uma unidade de medida pelo id',
-        name: 'ADM-MEASUREMENT_UNITS-FIND_BY_ID',
-      },
-      findall: {
-        description: 'Lista todas as unidades de medida',
-        name: 'ADM-MEASUREMENT_UNITS-FIND_ALL',
       },
     },
   },

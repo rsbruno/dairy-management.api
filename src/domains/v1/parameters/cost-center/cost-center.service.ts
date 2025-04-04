@@ -1,17 +1,13 @@
-import { AuthConfigsService } from '@/configs/auth-configs/auth-configs.service';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { Injectable } from '@nestjs/common';
 
 import { CostCenterRepository } from './cost-center.repository';
 import { ICostCenterCreateDTO } from './dto/body/model.dto';
+import { ICostCenterFindAll } from './dto/param/model.dto';
 import { ICostCenterDataDTO } from './dto/get/model';
 
 @Injectable()
 export class CostCenterService {
-  constructor(
-    private readonly costCenterRepository: CostCenterRepository,
-    private readonly authConfigsService: AuthConfigsService,
-  ) {}
+  constructor(private readonly costCenterRepository: CostCenterRepository) {}
 
   async create(costCenterCreateDto: ICostCenterCreateDTO): Promise<ICostCenterDataDTO> {
     try {
@@ -22,9 +18,9 @@ export class CostCenterService {
     }
   }
 
-  async findAll(pagination: IOffsetPagination) {
+  async findAll(query: ICostCenterFindAll) {
     try {
-      const costCenters = await this.costCenterRepository.findAll(pagination);
+      const costCenters = await this.costCenterRepository.findAll(query);
       return {
         ...costCenters,
         items: costCenters.items.map(costCenter => ICostCenterDataDTO.toICostCenterDataDTO(costCenter)),

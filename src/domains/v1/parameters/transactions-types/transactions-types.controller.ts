@@ -19,9 +19,9 @@ export class TransactionsTypesController {
   constructor(private readonly transactionsTypesService: TransactionsTypesService) {}
 
   @Get()
-  @Roles(roles.finance.transactionTypes.findall.name)
+  @Roles(roles.parameters.transactionTypes.findall.name)
   @ApiDocMethodPaginated({
-    description: roles.finance.transactionTypes.findall.description,
+    description: roles.parameters.transactionTypes.findall.description,
     responseModel: ITransactionsDataDTO,
   })
   async findAll(@Query() query: IOffsetPagination) {
@@ -29,9 +29,9 @@ export class TransactionsTypesController {
   }
 
   @Get(':id')
-  @Roles(roles.finance.transactionTypes.findbyid.name)
+  @Roles(roles.parameters.transactionTypes.findbyid.name)
   @ApiDocMethodGet({
-    description: roles.finance.transactionTypes.findbyid.description,
+    description: roles.parameters.transactionTypes.findbyid.description,
     responseModel: ITransactionsDataDTO,
   })
   async findById(@Param() params: ITransactionsTypesFindByIdDTO) {

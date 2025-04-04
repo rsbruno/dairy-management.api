@@ -9,11 +9,8 @@ import { AuthConfigsModule } from './configs/auth-configs/auth-configs.module';
 import { PersonsModule } from './domains/v1/identity/persons/persons.module';
 import { FarmsModule } from './domains/v1/administrative/farms/farms.module';
 import { ProductsModule } from './domains/v1/stock/products/products.module';
+import { BalanceModule } from './domains/v1/finance/balance/balance.module';
 import { AuthModule } from './domains/v1/identity/auth/auth.module';
-/* import { TenantsModule } from './domains/v1/administrative/tenants/tenants.module';
-import { FarmsModule } from './domains/v1/administrative/farms/farms.module'; */
-/* import { PersonsModule } from './domains/v1/identity/persons/persons.module'; */
-/* import { AuthModule } from '@/domains/v1/identity/auth/auth.module'; */
 import { PrismaModule } from './configs/database/prisma.module';
 
 @Module({
@@ -32,6 +29,7 @@ import { PrismaModule } from './configs/database/prisma.module';
     TransactionsModule,
     TransactionsTypesModule,
     MeasurementUnitsModule,
+    BalanceModule,
   ],
 })
 export class AppModule {}

@@ -18,6 +18,9 @@ export class ICostCenterDataDTO {
   id: string;
 
   @ApiProperty()
+  isRoot: boolean;
+
+  @ApiProperty()
   name: string;
 
   @ApiProperty({ type: () => Object, required: false, nullable: true })
@@ -28,6 +31,7 @@ export class ICostCenterDataDTO {
     const response: ICostCenterDataDTO = {
       description: handlerNullableStrings(costCenter.name),
       code: handlerNullableStrings(costCenter.code),
+      isRoot: !costCenter.parent,
       name: costCenter.name,
       id: costCenter.id,
     };

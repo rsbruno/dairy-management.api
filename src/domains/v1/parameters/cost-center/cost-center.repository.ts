@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { ICostCenterCreateDTO } from './dto/body/model.dto';
+import { ICostCenterFindAll } from './dto/param/model.dto';
 import { ICostCenterSelectDTO } from './dto/get/model';
 
 @Injectable()
@@ -42,11 +43,16 @@ export class CostCenterRepository {
     }
   }
 
-  async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<Array<ICostCenterSelectDTO>>> {
+  async findAll(query: ICostCenterFindAll): Promise<IOffsetPaginationResponse<Array<ICostCenterSelectDTO>>> {
     try {
-      const paginateService = new IOffsetPagination<ICostCenterSelectDTO>(this.prisma, pagination);
+      const paginateService = new IOffsetPagination<ICostCenterSelectDTO>(this.prisma, query);
       return await paginateService.paginate('CostCenter', {
-        where: { ...this.mountCostCenterWhereInput() },
+        where: {
+          ...this.mountCostCenterWhereInput(),
+          parent: query.onlyRoot && {
+            is: null,
+          },
+        },
         select: this.selectQueryCostCenter,
       });
     } catch (error) {

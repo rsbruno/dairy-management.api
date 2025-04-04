@@ -2,14 +2,13 @@ import { ApiDocMethodPaginated } from '@/decorators/swagger/api-doc-method-pagin
 import { Controller, UseGuards, Param, Query, Body, Post, Get } from '@nestjs/common';
 import { ApiDocMethodPost } from '@/decorators/swagger/api-doc-method-post.decorator';
 import { ApiDocMethodGet } from '@/decorators/swagger/api-doc-method-get.decorator';
-import { IOffsetPagination } from '@/models/pagination/offset-pagination/model';
 import { AuthenticationGuard } from '@/guards/auth/authentication.guard';
 import { AuthorizationGuard } from '@/guards/auth/authorization.guard';
 import { roles } from '@/configs/mapping-roles/index.roles';
 import { Roles } from '@/decorators/roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
-import { ICostCenterFindByIdDTO } from './dto/param/model.dto';
+import { ICostCenterFindByIdDTO, ICostCenterFindAll } from './dto/param/model.dto';
 import { ICostCenterCreateDTO } from './dto/body/model.dto';
 import { CostCenterService } from './cost-center.service';
 import { ICostCenterDataDTO } from './dto/get/model';
@@ -21,9 +20,9 @@ export class CostCenterController {
   constructor(private readonly costCenterService: CostCenterService) {}
 
   @Post()
-  @Roles(roles.finance.costcenter.create.name)
+  @Roles(roles.parameters.costCenter.create.name)
   @ApiDocMethodPost({
-    description: roles.finance.costcenter.create.description,
+    description: roles.parameters.costCenter.create.description,
     responseModel: ICostCenterDataDTO,
   })
   async create(@Body() costCenterCreateDto: ICostCenterCreateDTO) {
@@ -31,19 +30,19 @@ export class CostCenterController {
   }
 
   @Get()
-  @Roles(roles.finance.costcenter.findall.name)
+  @Roles(roles.parameters.costCenter.findall.name)
   @ApiDocMethodPaginated({
-    description: roles.finance.costcenter.findall.description,
+    description: roles.parameters.costCenter.findall.description,
     responseModel: ICostCenterDataDTO,
   })
-  async findAll(@Query() query: IOffsetPagination) {
+  async findAll(@Query() query: ICostCenterFindAll) {
     return this.costCenterService.findAll(query);
   }
 
   @Get(':id')
-  @Roles(roles.finance.costcenter.findbyid.name)
+  @Roles(roles.parameters.costCenter.findbyid.name)
   @ApiDocMethodGet({
-    description: roles.finance.costcenter.findbyid.description,
+    description: roles.parameters.costCenter.findbyid.description,
     responseModel: ICostCenterDataDTO,
   })
   async findById(@Param() params: ICostCenterFindByIdDTO) {
