@@ -31,7 +31,7 @@ export class ICostCenterDataDTO {
     const response: ICostCenterDataDTO = {
       description: handlerNullableStrings(costCenter.name),
       code: handlerNullableStrings(costCenter.code),
-      isRoot: !costCenter.parent,
+      isRoot: Boolean(costCenter.parent),
       name: costCenter.name,
       id: costCenter.id,
     };
