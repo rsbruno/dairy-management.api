@@ -1,4 +1,4 @@
-import { MeasurementUnits } from 'prisma/prisma-client';
+import { MeasurementUnits } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class IMeasurementUnitsSelectDTO implements MeasurementUnits {

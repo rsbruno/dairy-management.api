@@ -17,7 +17,7 @@ export class BalanceRepository {
     costCenters: Map<string, ICostCenterSelectDTO>,
     query: ICostCenterBalanceByCostCenterId,
   ): Promise<Array<ITransactionSelectDTO>> {
-    const { tenant } = this.authConfigsService.getUser();
+    const { farm } = this.authConfigsService.getUser();
     return (await this.prisma.transactions.findMany({
       where: {
         createdAt: {
@@ -28,7 +28,7 @@ export class BalanceRepository {
           in: Array.from(costCenters.keys()),
         },
         farm: {
-          id: tenant.farm.id,
+          id: farm.id,
         },
       },
       include: { costCenter: true },
@@ -54,7 +54,7 @@ export class BalanceRepository {
   }
 
   async transactionsByType(query: IBalanceDataByTypeDTO): Promise<Array<ITransactionSelectDTO>> {
-    const { tenant } = this.authConfigsService.getUser();
+    const { farm } = this.authConfigsService.getUser();
     return (await this.prisma.transactions.findMany({
       where: {
         createdAt: {
@@ -67,7 +67,7 @@ export class BalanceRepository {
           },
         },
         farm: {
-          id: tenant.farm.id,
+          id: farm.id,
         },
       },
       include: { costCenter: true },

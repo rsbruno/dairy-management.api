@@ -1,3 +1,4 @@
+import { IFarmsSelectDTO } from '@/domains/v1/administrative/farms/dto/get/model.dto';
 import { UnauthorizedException, Injectable, Inject, Scope } from '@nestjs/common';
 import { KeycloakUserService } from '@/keycloak/users/keycloak-user.service';
 import { IJWTGetDataDto } from '@/models/headers/model.dto';
@@ -26,12 +27,12 @@ export class AuthConfigsService {
   public async _loadInfoUserLogged(): Promise<IAuthConfigsUserGetDataDto> {
     try {
       const roles = await this.findRolesByKeycloakId();
-      const tenant = await this.findTenantsByClientId();
-      const info = { ...(await this.findUserByKeycloakId()), keycloakId: this.token.payload.sub };
+      const farm = await this.findActiveFarm();
+      const user = { ...(await this.findPersonByKeycloakId()), keycloakId: this.token.payload.sub };
       this.user = {
-        tenant,
         roles,
-        info,
+        user,
+        farm,
       };
       return this.user;
     } catch (error) {
@@ -40,7 +41,24 @@ export class AuthConfigsService {
   }
 
   public getUser() {
-    return this.user as any;
+    return this.user;
+  }
+
+  private async findActiveFarm(): Promise<IFarmsSelectDTO> {
+    try {
+      return (await this.authConfigsRepository.findActiveFarm({
+        AND: {
+          activeMembers: {
+            some: {
+              keycloakId: this.token.payload.sub,
+            },
+          },
+        },
+        clientId: this.token.payload.azp,
+      })) as unknown as IFarmsSelectDTO;
+    } catch (error) {
+      throw error;
+    }
   }
 
   private async findAssignedRolesByGroup(id: string): Promise<Array<IRolesGetDataDto>> {
@@ -52,37 +70,19 @@ export class AuthConfigsService {
     }
   }
 
+  private async findPersonByKeycloakId(): Promise<any> {
+    try {
+      return await this.authConfigsRepository.findUserBy({ keycloakId: this.token.payload.sub });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   private async findRolesByKeycloakId() {
     try {
       const { data } = await this.authConfigsRepository.findAssignedGroups(this.token.payload.sub);
       const roles = await Promise.all(data.map(async group => this.findAssignedRolesByGroup(group.id)));
       return roles.flat();
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private async findTenantsByClientId() {
-    try {
-      return await this.authConfigsRepository.findTenantsBy({
-        AND: {
-          members: {
-            some: {
-              keycloakId: this.token.payload.sub,
-            },
-          },
-        },
-        clientId: this.token.payload.azp,
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private async findUserByKeycloakId(): Promise<any> {
-    try {
-      const person = await this.authConfigsRepository.findUserBy({ keycloakId: this.token.payload.sub });
-      return await this.keycloakUserService.findById(person.keycloakId);
     } catch (error) {
       throw error;
     }

@@ -1,4 +1,4 @@
-import { TransactionsTypes } from 'prisma/prisma-client';
+import { TransactionsTypes } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ITransactionsSelectDTO implements TransactionsTypes {

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "cm9cz3zuh00003j6mdia3x8tq",
+    "name": "Entrada",
+    "code": "income"
+  },
+  {
+    "id": "cm9cz44o600013j6mv2f6fync",
+    "name": "Saídas",
+    "code": "expense"
+  }
+]

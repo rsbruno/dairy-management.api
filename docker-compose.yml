@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: milk-management-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: milk-management-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - keycloak-network
+    ports:
+      - "5432:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.2
+    container_name: milk-management-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://REDACTED_HOST/milk-management-db?sslmode=require
+      KC_DB_USERNAME: REDACTED_USER
+      KC_DB_PASSWORD: REDACTED
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    command: [ "start-dev" ]
+    depends_on:
+      - postgres
+    networks:
+      - keycloak-network
+
+volumes:
+  postgres_data:
+
+
+networks:
+  keycloak-network:

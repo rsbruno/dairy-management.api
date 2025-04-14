@@ -39,11 +39,9 @@ export class TransactionsTypesRepository {
   }
 
   private mountTransactionsTypesWhereInput() {
-    const { tenant } = this.authConfigsService.getUser();
+    const { farm } = this.authConfigsService.getUser();
     return {
-      farm: {
-        id: tenant.farm.id,
-      },
+      OR: [{ farmId: farm.id }, { farmId: null }],
     };
   }
 }

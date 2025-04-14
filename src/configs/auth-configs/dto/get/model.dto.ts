@@ -1,25 +1,19 @@
-import { ITenantsDataDTO } from '@/domains/v1/administrative/tenants/dto/get/model.dto';
+import { IFarmsSelectDTO } from '@/domains/v1/administrative/farms/dto/get/model.dto';
+import { IPersonsSelectDTO } from '@/domains/v1/identity/persons/dto/get/model.dto';
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class IAuthConfigsUserGetAllDto {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  keycloakId: string;
-}
-
 export class IAuthConfigsUserGetDataDto {
   @ApiProperty()
-  info?: IAuthConfigsUserGetAllDto;
+  farm?: IFarmsSelectDTO;
 
   @ApiProperty()
   roles?: IRolesGetDataDto[];
 
   @ApiProperty()
-  tenant?: ITenantsDataDTO;
+  user?: IPersonsSelectDTO;
 }
-
 export class IGroupsGetDataDto {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.validator.isNotEmpty })

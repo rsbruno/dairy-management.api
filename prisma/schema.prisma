@@ -8,42 +8,35 @@ datasource db {
 }
 
 model Persons {
-  id          String         @id @default(cuid())
-  keycloakId  String         @unique
-  username    String         @unique
-  fullName    String         @default("")
-  enabled     Boolean        @default(true)
-  tenants     Tenants[]
-  transaction Transactions[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id           String         @id @default(cuid())
+  keycloakId   String         @unique
+  activeFarm   Farms?         @relation("active_farm", fields: [activeFarmId], references: [id])
+  activeFarmId String?
+  username     String         @unique
+  fullName     String         @default("")
+  enabled      Boolean        @default(true)
+  transaction  Transactions[]
+  farms        Farms[]        @relation("farms_to_person")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  farmsId      String?
 
   @@map("persons")
-}
-
-model Tenants {
-  id           String    @id @default(cuid())
-  clientId     String    @unique
-  clientSecret String    @unique
-  farm         Farms     @relation(fields: [farmsId], references: [id])
-  farmsId      String    @unique
-  members      Persons[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  @@map("tenants")
 }
 
 model Farms {
   id                String              @id @default(cuid())
   name              String
-  cnpj              String              @unique
-  Tenants           Tenants?
+  cnpj              String?             @unique
+  clientId          String              @unique
+  clientSecret      String              @unique
   CostCenter        CostCenter[]
   products          Products[]
   transactions      Transactions[]
   transactionsTypes TransactionsTypes[]
   measurementUnits  MeasurementUnits[]
+  activeMembers     Persons[]           @relation("active_farm")
+  members           Persons[]           @relation("farms_to_person")
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 
@@ -54,13 +47,13 @@ model CostCenter {
   id               String         @id @default(cuid())
   name             String         @db.VarChar(100)
   description      String?        @db.VarChar(200)
-  code             String?        @unique @db.VarChar(20)
-  farm             Farms          @relation(fields: [farmId], references: [id])
-  farmId           String
+  code             String?        @db.VarChar(20)
+  farm             Farms?         @relation(fields: [farmId], references: [id])
+  farmId           String?
   transactions     Transactions[]
-  childCostCenters CostCenter[]   @relation("ParentCostCenter")
+  childCostCenters CostCenter[]   @relation("parent_cost_center")
   parentId         String?
-  parent           CostCenter?    @relation("ParentCostCenter", fields: [parentId], references: [id])
+  parent           CostCenter?    @relation("parent_cost_center", fields: [parentId], references: [id])
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
@@ -87,16 +80,16 @@ model Transactions {
   description   String?           @db.VarChar(200)
   quantity      Float
   unitPrice     Float
-  product       Products          @relation(fields: [productId], references: [id])
-  productId     String
+  product       Products?         @relation(fields: [productId], references: [id])
+  productId     String?
   responsible   Persons           @relation(fields: [responsibleId], references: [id])
   responsibleId String
   farm          Farms             @relation(fields: [farmId], references: [id])
   farmId        String
   type          TransactionsTypes @relation(fields: [typeId], references: [id])
   typeId        String
-  costCenter    CostCenter?       @relation(fields: [costCenterId], references: [id])
-  costCenterId  String?
+  costCenter    CostCenter        @relation(fields: [costCenterId], references: [id])
+  costCenterId  String
   createdAt     DateTime          @default(now())
 
   @@map("transactions")

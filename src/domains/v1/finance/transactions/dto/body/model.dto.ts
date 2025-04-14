@@ -8,11 +8,11 @@ export class ITransactionsCreateDTO {
   costCenterId: string;
 
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsOptional()
   description: string;
 
   @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsOptional()
   productId: string;
 
   @ApiProperty()

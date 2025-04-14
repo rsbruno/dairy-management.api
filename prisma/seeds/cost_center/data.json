@@ -1,0 +1,92 @@
+[
+  {
+    "id": "cm9d1j6rs000148uoeqyt2spl",
+    "name": "Receita Bruta",
+    "code": "A",
+    "children": [
+      { "id": "cm9d1j6rs000248uobfqx2ov1", "name": "Venda Cota De Leite", "code": "A.1" },
+      { "id": "cm9d1j6rs000348uo7coodb3v", "name": "Venda De Animais", "code": "A.2" },
+      { "id": "cm9d1j6rs000448uoemkvesy7", "name": "Outros Produtos", "code": "A.3" }
+    ]
+  },
+  {
+    "id": "cm9d1j6rs000548uo7vi82a0t",
+    "name": "Despesas Operacionais",
+    "code": "B",
+    "children": [
+      { "id": "cm9d1j6rs000648uo03kx0wk8", "name": "Concentrados E Minerais", "code": "B.1" },
+      {
+        "id": "cm9d1j6rs000748uo8dok8t8i",
+        "name": "Produção De Forragem",
+        "code": "B.2",
+        "children": [
+          { "id": "cm9d1j6rs000848uo8zl8ar1w", "name": "Silagem De Milho", "code": "B.2.1" },
+          {
+            "id": "cm9d1j6rs000948uo0er68kpi",
+            "name": "Cana-De-Açúcar: Produção E Uso",
+            "code": "B.2.2"
+          },
+          { "id": "cm9d1j6rs000a48uob9qi2eqk", "name": "Capineira", "code": "B.2.3" }
+        ]
+      },
+      { "id": "cm9d1j6rs000b48uocoq773mp", "name": "Compra De Volumosos", "code": "B.3" },
+      {
+        "id": "cm9d1j6rs000c48uodhlu3nxm",
+        "name": "Manutenção De Pastagens",
+        "code": "B.4",
+        "children": [
+          { "id": "cm9d1j6rs000d48uoecnp93w9", "name": "Capim Elefante", "code": "B.4.1" },
+          { "id": "cm9d1j6rs000e48uo144c3goh", "name": "Pastagens Diversas", "code": "B.4.2" }
+        ]
+      },
+      { "id": "cm9d1j6rs000f48uoasw75r9u", "name": "Aluguel De Pastagens", "code": "B.5" },
+      {
+        "id": "cm9d1j6rs000g48uob02x9gcn",
+        "name": "Sanidade Do Rebanho",
+        "code": "B.6",
+        "children": [
+          { "id": "cm9d1j6rs000h48uof30rhoww", "name": "Medicamentos", "code": "B.6.1" },
+          {
+            "id": "cm9d1j6rs000i48uo2gr00swk",
+            "name": "Carrapaticida E Bernicidas",
+            "code": "B.6.2"
+          },
+          { "id": "cm9d1j6rs000j48uo0rsf5iro", "name": "Vacinas", "code": "B.6.3" },
+          {
+            "id": "cm9d1j6rs000k48uofvup09sp",
+            "name": "Material De Limpeza E Desinfecção",
+            "code": "B.6.4"
+          }
+        ]
+      },
+      { "id": "cm9d1j6rs000l48uogltc572l", "name": "Ordenha Mecânica", "code": "B.7" },
+      { "id": "cm9d1j6rs000m48uoawzc2vto", "name": "Inseminação Artificial", "code": "B.8" },
+      {
+        "id": "cm9d1j6rs000n48uoev8le4jv",
+        "name": "Energia, Combustíveis E Lubrificantes",
+        "code": "B.9"
+      },
+      { "id": "cm9d1j6rs000o48uob0ul1tq8", "name": "Ferramentas E Utensílios", "code": "B.10" },
+      {
+        "id": "cm9d1j6rs000p48uoajz51g23",
+        "name": "Reparo De Máquinas E Equipamentos",
+        "code": "B.11"
+      },
+      {
+        "id": "cm9d1j6rs000q48uoa44rg87w",
+        "name": "Manutenção De Benfeitorias E Instalações",
+        "code": "B.12"
+      },
+      { "id": "cm9d1j6rs000r48uofv8if356", "name": "Administração E Consultoria", "code": "B.13" },
+      { "id": "cm9d1j6rs000s48uo936o3rwp", "name": "Mão-De-Obra", "code": "B.14" },
+      {
+        "id": "cm9d1j6rs000t48uo8bez8juq",
+        "name": "Impostos E Taxas",
+        "code": "B.15",
+        "children": [{ "id": "cm9d1j6rs000u48uo3dz11wdy", "name": "Funrural", "code": "B.15.1" }]
+      },
+      { "id": "cm9d1j6rs000v48uofoct5e39", "name": "Outras Despesas", "code": "B.16" }
+    ]
+  },
+  { "id": "cm9d1j6rs000w48uoh0ntc7h4", "name": "Investimentos", "code": "C" }
+]

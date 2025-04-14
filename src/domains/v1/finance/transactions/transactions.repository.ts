@@ -29,17 +29,17 @@ export class TransactionsRepository {
 
   async create(transactionsCreateDTO: ITransactionsCreateDTO) {
     try {
-      const { info: user, tenant } = this.authConfigsService.getUser();
+      const { user, farm } = this.authConfigsService.getUser();
       return (await this.prisma.transactions.create({
         data: {
+          product: transactionsCreateDTO.productId && {
+            connect: {
+              id: transactionsCreateDTO.productId,
+            },
+          },
           costCenter: {
             connect: {
               id: transactionsCreateDTO.costCenterId,
-            },
-          },
-          product: {
-            connect: {
-              id: transactionsCreateDTO.productId,
             },
           },
           type: {
@@ -54,7 +54,7 @@ export class TransactionsRepository {
           },
           farm: {
             connect: {
-              id: tenant.farm.id,
+              id: farm.id,
             },
           },
           description: transactionsCreateDTO.description,
@@ -70,7 +70,7 @@ export class TransactionsRepository {
 
   async findAll(query: ITransactionsFindAllDTO): Promise<IOffsetPaginationResponse<Array<ITransactionSelectDTO>>> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       const paginateService = new IOffsetPagination<ITransactionSelectDTO>(this.prisma, query);
       return await paginateService.paginate('Transactions', {
         where: {
@@ -91,7 +91,7 @@ export class TransactionsRepository {
             id: query.typeId,
           },
           farm: {
-            id: tenant.farm.id,
+            id: farm.id,
           },
         },
         select: this.selectQueryTransactions,

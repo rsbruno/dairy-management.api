@@ -1,7 +1,7 @@
 import { IMeasurementUnitsDataDTO } from '@/domains/v1/parameters/measurement-units/dto/get/model';
 import { handlerNullableStrings } from '@/utils/strings/handler-nullable.strings';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { Products } from 'prisma/prisma-client';
+import { Products } from '@prisma/client';
 
 export class IProductsSelectDTO implements Products {
   createdAt: Date;

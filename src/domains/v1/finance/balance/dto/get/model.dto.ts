@@ -35,7 +35,7 @@ export class IBalanceDataDTO {
       total: formatNumberToMoney(b.total),
     }));
 
-    const total = details.reduce(
+    const result = details.reduce(
       (acc, { total }) => ({
         total: acc.total + total,
       }),
@@ -44,6 +44,6 @@ export class IBalanceDataDTO {
       },
     );
 
-    return { ...total, details };
+    return { total: formatNumberToMoney(result.total), details };
   }
 }

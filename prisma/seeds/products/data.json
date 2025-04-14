@@ -1,0 +1,164 @@
+[
+  {
+    "name": "Leite de Vaca",
+    "description": "Produto proveniente da ordenha de vacas leiteiras.",
+    "costCenterId": "cm9d1j6rs000248uobfqx2ov1",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  },
+  {
+    "name": "Ração Concentrada",
+    "description": "Mistura balanceada de ingredientes para alimentação de gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000648uo03kx0wk8",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Vacinas para Gado",
+    "description": "Vacinas aplicadas no rebanho leiteiro para prevenção de doenças.",
+    "costCenterId": "cm9d1j6rs000j48uo0rsf5iro",
+    "measurementUnitId": "cm9cye6lh000gscuo3p2jbciv"
+  },
+  {
+    "name": "Silagem de Milho",
+    "description": "Alimento volumoso fermentado utilizado na alimentação do gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000848uo8zl8ar1w",
+    "measurementUnitId": "cm9cye6lh0008scuocxzx1ded"
+  },
+  {
+    "name": "Cana-de-Açúcar",
+    "description": "Alimento volumoso para alimentação de gado, utilizado principalmente para produção de leite.",
+    "costCenterId": "cm9d1j6rs000948uo0er68kpi",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Manutenção de Pastagens",
+    "description": "Serviço de cuidado e manutenção das pastagens para alimentação do gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000c48uodhlu3nxm",
+    "measurementUnitId": "cm9cye6lg0004scuo1q7gdu9i"
+  },
+  {
+    "name": "Energia para Ordenha",
+    "description": "Gastos com energia elétrica para as máquinas de ordenha mecânica.",
+    "costCenterId": "cm9d1j6rs000l48uogltc572l",
+    "measurementUnitId": "cm9cye6lh000hscuo54g5bvbq"
+  },
+  {
+    "name": "Mão de Obra na Ordenha",
+    "description": "Gastos com a mão de obra envolvida na ordenha do gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000l48uogltc572l",
+    "measurementUnitId": "cm9cye6lh0009scuo35svey8v"
+  },
+  {
+    "name": "Pasto para Gado",
+    "description": "Pastagem natural utilizada para alimentação do rebanho leiteiro.",
+    "costCenterId": "cm9d1j6rs000c48uodhlu3nxm",
+    "measurementUnitId": "cm9cye6lh0006scuo71o08yzm"
+  },
+  {
+    "name": "Higiene de Ordenha",
+    "description": "Produtos usados para limpeza e desinfecção das instalações de ordenha.",
+    "costCenterId": "cm9d1j6rs000k48uofvup09sp",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  },
+  {
+    "name": "Feno de Alfafa",
+    "description": "Forragem seca de alfafa utilizada para alimentação do rebanho.",
+    "costCenterId": "cm9d1j6rs000b48uocoq773mp",
+    "measurementUnitId": "cm9cye6lh0007scuo5uuygdwa"
+  },
+  {
+    "name": "Controle de Mastite",
+    "description": "Produtos utilizados para o controle e tratamento da mastite nas vacas leiteiras.",
+    "costCenterId": "cm9d1j6rs000h48uof30rhoww",
+    "measurementUnitId": "cm9cye6lh000bscuobytb5x58"
+  },
+  {
+    "name": "Suplementação Mineral",
+    "description": "Suplementos minerais para melhorar a saúde e produtividade do rebanho.",
+    "costCenterId": "cm9d1j6rs000648uo03kx0wk8",
+    "measurementUnitId": "cm9cye6lh0007scuo5uuygdwa"
+  },
+  {
+    "name": "Gastos com Transporte de Leite",
+    "description": "Custo com o transporte do leite até o ponto de venda ou indústria.",
+    "costCenterId": "cm9d1j6rs000648uo03kx0wk8",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  },
+  {
+    "name": "Insumos para Fertilização de Pasto",
+    "description": "Produtos usados para fertilizar e melhorar a qualidade das pastagens.",
+    "costCenterId": "cm9d1j6rs000b48uocoq773mp",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Refrigerador de Leite",
+    "description": "Equipamento para armazenamento de leite fresco em temperatura controlada.",
+    "costCenterId": "cm9d1j6rs000l48uogltc572l",
+    "measurementUnitId": "cm9cye6lh000hscuo54g5bvbq"
+  },
+  {
+    "name": "Desinfetante para Instalações",
+    "description": "Produto utilizado para desinfetar as instalações onde o gado é ordenhado.",
+    "costCenterId": "cm9d1j6rs000k48uofvup09sp",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  },
+  {
+    "name": "Cloro para Sanitização",
+    "description": "Cloro utilizado para sanitizar as instalações de ordenha.",
+    "costCenterId": "cm9d1j6rs000k48uofvup09sp",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  },
+  {
+    "name": "Ração Balanceada para Gado Leiteiro",
+    "description": "Ração especialmente formulada para atender as necessidades nutricionais das vacas leiteiras.",
+    "costCenterId": "cm9d1j6rs000648uo03kx0wk8",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Sistema de Irrigação para Pastagem",
+    "description": "Sistema utilizado para irrigar pastagens e melhorar a produtividade da alimentação do rebanho.",
+    "costCenterId": "cm9d1j6rs000b48uocoq773mp",
+    "measurementUnitId": "cm9cye6lh000hscuo54g5bvbq"
+  },
+  {
+    "name": "Antibióticos Veterinários",
+    "description": "Medicamentos utilizados no tratamento de infecções e doenças do gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000h48uof30rhoww",
+    "measurementUnitId": "cm9cye6lh000bscuobytb5x58"
+  },
+  {
+    "name": "Palha de Arroz",
+    "description": "Forragem utilizada na alimentação do gado e também como material para cama de animais.",
+    "costCenterId": "cm9d1j6rs000b48uocoq773mp",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Estábulos e Sementes para Pasto",
+    "description": "Materiais para construção de estábulos e sementes para plantar pasto.",
+    "costCenterId": "cm9d1j6rs000c48uodhlu3nxm",
+    "measurementUnitId": "cm9cye6lh0006scuo71o08yzm"
+  },
+  {
+    "name": "Vitamínicos para Gado Leiteiro",
+    "description": "Suplementos vitamínicos que melhoram a saúde e produtividade do rebanho.",
+    "costCenterId": "cm9d1j6rs000648uo03kx0wk8",
+    "measurementUnitId": "cm9cye6lg0005scuof87r6zww"
+  },
+  {
+    "name": "Controle de Carrapatos",
+    "description": "Produtos utilizados para o controle de parasitas como carrapatos que afetam o gado leiteiro.",
+    "costCenterId": "cm9d1j6rs000i48uo2gr00swk",
+    "measurementUnitId": "cm9cye6lh000bscuobytb5x58"
+  },
+  {
+    "name": "Médico Veterinário",
+    "description": "Custo com profissionais veterinários para o acompanhamento da saúde do rebanho.",
+    "costCenterId": "cm9d1j6rs000948uo0er68kpi",
+    "measurementUnitId": "cm9cye6lh0009scuo35svey8v"
+  },
+  {
+    "name": "Custo com Leite de Substituição",
+    "description": "Leite utilizado para substituir a alimentação de bezerros durante o processo de desmame.",
+    "costCenterId": "cm9d1j6rs000b48uocoq773mp",
+    "measurementUnitId": "cm9cye6lg0003scuoad2uex5x"
+  }
+]

@@ -15,17 +15,16 @@ export class PersonsRepository {
 
   async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<IPersonsSelectDTO[]>> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       const paginateService = new IOffsetPagination<IPersonsSelectDTO>(this.prisma, pagination);
       return await paginateService.paginate('Persons', {
         where: {
-          tenants: {
+          farms: {
             some: {
-              farmsId: tenant.farm.id,
+              id: farm.id,
             },
           },
         },
-        include: { tenants: { include: { farm: true } } },
       });
     } catch (error) {
       throw error;
@@ -34,17 +33,16 @@ export class PersonsRepository {
 
   async findBy(where: Prisma.PersonsWhereInput) {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       const response = await this.prisma.persons.findFirstOrThrow({
         where: {
-          tenants: {
+          farms: {
             some: {
-              farmsId: tenant.farm.id,
+              id: farm.id,
             },
           },
           AND: where,
         },
-        include: { tenants: { include: { farm: true } } },
       });
       return response as unknown as IPersonsSelectDTO;
     } catch (error) {

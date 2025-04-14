@@ -61,6 +61,22 @@ export const roles = {
       },
     },
   },
+  administrative: {
+    farms: {
+      findbyid: {
+        description: 'Busca uma fazenda pelo id',
+        name: 'ADM-FARMS-FIND_BY_ID',
+      },
+      findall: {
+        description: 'Lista todas as fazendas',
+        name: 'ADM-FARMS-FIND_ALL',
+      },
+      switch: {
+        description: 'Permite trocar de fazenda',
+        name: 'ADM-FARMS-SWITCH',
+      },
+    },
+  },
   stocks: {
     products: {
       findbyid: {
@@ -90,18 +106,6 @@ export const roles = {
       create: {
         description: 'Adiciona uma pessoa',
         name: 'IDT-PERSON-CREATE',
-      },
-    },
-  },
-  administrative: {
-    farms: {
-      findbyid: {
-        description: 'Busca uma fazenda pelo id',
-        name: 'ADM-FARMS-FIND_BY_ID',
-      },
-      findall: {
-        description: 'Lista todas as fazendas',
-        name: 'ADM-FARMS-FIND_ALL',
       },
     },
   },

@@ -22,7 +22,8 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@/prisma/*": ["src/configs/prisma/*"]
     }
   }
 }

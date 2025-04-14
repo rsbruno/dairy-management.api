@@ -1,29 +1,39 @@
 import { commonExceptions } from '@/mappings/common-exceptions.mapping';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsDate } from '@/decorators/validators/is-date.decorator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
 
 export class ICostCenterBalanceByCostCenterId {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   costCenterId: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsDate({ message: commonExceptions.param.isDate })
+  @Transform(({ value }) => new Date(value))
   endDate: Date;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsDate({ message: commonExceptions.param.isDate })
+  @Transform(({ value }) => new Date(value))
   startDate: Date;
 }
 
 export class IBalanceDataByTypeDTO {
   code: Array<string>;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsDate({ message: commonExceptions.param.isDate })
+  @Transform(({ value }) => new Date(value))
   endDate: Date;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
+  @IsDate({ message: commonExceptions.param.isDate })
+  @Transform(({ value }) => new Date(value))
   startDate: Date;
 }

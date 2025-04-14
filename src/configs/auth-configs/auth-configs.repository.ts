@@ -1,4 +1,3 @@
-import { ITenantsSelectDTO, ITenantsDataDTO } from '@/domains/v1/administrative/tenants/dto/get/model.dto';
 import { IHeadersGetDto } from '@/models/headers/model.dto';
 import { Injectable, Inject } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
@@ -16,6 +15,14 @@ export class AuthConfigsRepository {
     private readonly prisma: PrismaService,
     private readonly http: HttpService,
   ) {}
+
+  async findActiveFarm(where: Prisma.FarmsWhereInput) {
+    try {
+      return await this.prisma.farms.findFirstOrThrow({ where });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async findAssignedGroups(id: string) {
     try {
@@ -43,37 +50,9 @@ export class AuthConfigsRepository {
     }
   }
 
-  async findTenantsBy(where: Prisma.TenantsWhereInput): Promise<ITenantsDataDTO> {
-    try {
-      const tenant = (await this.prisma.tenants.findFirstOrThrow({
-        orderBy: {
-          id: 'desc',
-        },
-        include: { farm: true },
-        where,
-      })) as unknown as ITenantsSelectDTO;
-      return ITenantsDataDTO.transform(tenant);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async findUserBy(where: Prisma.PersonsWhereInput) {
     try {
-      const response = await this.prisma.persons.findFirstOrThrow({
-        select: {
-          tenants: {
-            select: {
-              members: true,
-              farm: true,
-            },
-          },
-          keycloakId: true,
-          username: true,
-          id: true,
-        },
-        where,
-      });
+      const response = await this.prisma.persons.findFirstOrThrow({ where });
       return response;
     } catch (error) {
       throw error;

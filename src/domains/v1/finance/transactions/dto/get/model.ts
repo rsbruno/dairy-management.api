@@ -2,7 +2,8 @@ import { ITransactionsSelectDTO, ITransactionsDataDTO } from '@/domains/v1/param
 import { ICostCenterSelectDTO, ICostCenterDataDTO } from '@/domains/v1/parameters/cost-center/dto/get/model';
 import { IPersonsSelectDTO, IPersonsDataDTO } from '@/domains/v1/identity/persons/dto/get/model.dto';
 import { IProductsSelectDTO, IProductsDataDTO } from '@/domains/v1/stock/products/dto/get/model';
-import { Transactions } from 'prisma/prisma-client';
+import { formatNumberToMoney } from '@/utils/format-number-to-mony';
+import { Transactions } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ITransactionSelectDTO implements Transactions {
@@ -57,9 +58,9 @@ export class ITransactionDataDTO {
       responsible: IPersonsDataDTO.transform(transaction.responsible),
       product: IProductsDataDTO.transform(transaction.product),
       type: ITransactionsDataDTO.transform(transaction.type),
+      unitPrice: formatNumberToMoney(transaction.unitPrice),
       description: transaction.description,
       createdAt: transaction.createdAt,
-      unitPrice: transaction.unitPrice,
       quantity: transaction.quantity,
       id: transaction.id,
     };

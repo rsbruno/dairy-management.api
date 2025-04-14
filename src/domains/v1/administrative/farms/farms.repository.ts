@@ -15,14 +15,12 @@ export class FarmsRepository {
 
   async findAll(pagination: IOffsetPagination) {
     try {
-      const { info } = this.authConfigsService.getUser();
+      const { user } = this.authConfigsService.getUser();
       const paginateService = new IOffsetPagination<IFarmsSelectDTO>(this.prisma, pagination);
       return await paginateService.paginate('Farms', {
         where: {
-          Tenants: {
-            members: {
-              some: { id: info.id },
-            },
+          members: {
+            some: { id: user.id },
           },
         },
       });
@@ -33,17 +31,34 @@ export class FarmsRepository {
 
   async findBy(where: Prisma.FarmsWhereInput): Promise<IFarmsSelectDTO> {
     try {
-      const { info } = this.authConfigsService.getUser();
+      const { user } = this.authConfigsService.getUser();
       return (await this.prisma.farms.findFirstOrThrow({
         where: {
-          Tenants: {
-            members: {
-              some: { id: info.id },
-            },
+          members: {
+            some: { id: user.id },
           },
           AND: where,
         },
       })) as unknown as IFarmsSelectDTO;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async switch(farmId: string): Promise<void> {
+    try {
+      const { user } = this.authConfigsService.getUser();
+      await this.prisma.persons.update({
+        where: {
+          AND: {
+            farms: {
+              some: { id: farmId },
+            },
+          },
+          id: user.id,
+        },
+        data: { activeFarm: { connect: { id: farmId } } },
+      });
     } catch (error) {
       throw error;
     }

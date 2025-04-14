@@ -39,20 +39,9 @@ export class MeasurementUnitsRepository {
   }
 
   private mountMeasurementUnitsWhereInput() {
-    const { tenant } = this.authConfigsService.getUser();
+    const { farm } = this.authConfigsService.getUser();
     return {
-      OR: [
-        {
-          farmId: {
-            equals: null,
-          },
-        },
-        {
-          farm: {
-            id: tenant.farm.id,
-          },
-        },
-      ],
+      OR: [{ farmId: farm.id }, { farmId: null }],
     };
   }
 }

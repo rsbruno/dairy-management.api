@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Farms } from 'prisma/prisma-client';
+import { Farms } from '@prisma/client';
 
 export class IFarmsSelectDTO implements Farms {
   clientId: string;
+  clientSecret: string;
   cnpj: string;
   createdAt: Date;
   id: string;

@@ -18,14 +18,14 @@ export class ProductsRepository {
 
   async create(productsCreateDTO: IProductsCreateDTO): Promise<IProductsSelectDTO> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       return (await this.prisma.products.create({
         data: {
           measurementUnit: {
             connect: { id: productsCreateDTO.measurementUnitId },
           },
           farm: {
-            connect: { id: tenant.farm.id },
+            connect: { id: farm.id },
           },
           description: productsCreateDTO.description,
           name: productsCreateDTO.name,
@@ -39,10 +39,10 @@ export class ProductsRepository {
 
   async findAll(pagination: IOffsetPagination): Promise<IOffsetPaginationResponse<Array<IProductsSelectDTO>>> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       const paginateService = new IOffsetPagination<IProductsSelectDTO>(this.prisma, pagination);
       return await paginateService.paginate('Products', {
-        where: { farmId: tenant.farm.id },
+        where: { farm: { id: farm.id } },
         select: this.selectQueryProducts,
       });
     } catch (error) {
@@ -52,10 +52,10 @@ export class ProductsRepository {
 
   async findBy(where: Prisma.ProductsWhereInput): Promise<IProductsSelectDTO> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       return (await this.prisma.products.findFirstOrThrow({
         where: {
-          farmId: tenant.farm.id,
+          farm: { id: farm.id },
           AND: where,
         },
         select: this.selectQueryProducts,

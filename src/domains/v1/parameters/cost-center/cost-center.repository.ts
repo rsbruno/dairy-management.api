@@ -19,7 +19,7 @@ export class CostCenterRepository {
 
   async create(costCenterCreateDto: ICostCenterCreateDTO): Promise<ICostCenterSelectDTO> {
     try {
-      const { tenant } = this.authConfigsService.getUser();
+      const { farm } = this.authConfigsService.getUser();
       return (await this.prisma.costCenter.create({
         data: {
           parent: costCenterCreateDto.parentId && {
@@ -29,7 +29,7 @@ export class CostCenterRepository {
           },
           farm: {
             connect: {
-              id: tenant.farm.id,
+              id: farm.id,
             },
           },
           description: costCenterCreateDto.description,
@@ -72,11 +72,9 @@ export class CostCenterRepository {
   }
 
   private mountCostCenterWhereInput() {
-    const { tenant } = this.authConfigsService.getUser();
+    const { farm } = this.authConfigsService.getUser();
     return {
-      farm: {
-        id: tenant.farm.id,
-      },
+      OR: [{ farmId: farm.id }, { farmId: null }],
     };
   }
 }

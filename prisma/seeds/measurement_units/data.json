@@ -1,0 +1,149 @@
+[
+  {
+    "id": "cm9cye6lg0003scuoad2uex5x",
+    "name": "Litros",
+    "code": "lts",
+    "baseUnit": "mililitros",
+    "conversionRate": 1000
+  },
+  {
+    "id": "cm9cye6lg0004scuo1q7gdu9i",
+    "name": "Cabeças",
+    "code": "cab",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lg0005scuof87r6zww",
+    "name": "Sacas",
+    "code": "scs",
+    "baseUnit": "quilogramas",
+    "conversionRate": 60
+  },
+  {
+    "id": "cm9cye6lh0006scuo71o08yzm",
+    "name": "Hectares",
+    "code": "ht",
+    "baseUnit": "metros quadrados",
+    "conversionRate": 10000
+  },
+  {
+    "id": "cm9cye6lh0007scuo5uuygdwa",
+    "name": "Quilogramas",
+    "code": "kg",
+    "baseUnit": "gramas",
+    "conversionRate": 1000
+  },
+  {
+    "id": "cm9cye6lh0008scuocxzx1ded",
+    "name": "Toneladas",
+    "code": "ton",
+    "baseUnit": "quilogramas",
+    "conversionRate": 1000
+  },
+  {
+    "id": "cm9cye6lh0009scuo35svey8v",
+    "name": "Dia-homem",
+    "code": "dh",
+    "baseUnit": "horas",
+    "conversionRate": 8
+  },
+  {
+    "id": "cm9cye6lh000ascuofvqxg96v",
+    "name": "Hectares",
+    "code": "ha",
+    "baseUnit": "metros quadrados",
+    "conversionRate": 10000
+  },
+  {
+    "id": "cm9cye6lh000bscuobytb5x58",
+    "name": "Frasco",
+    "code": "fras",
+    "baseUnit": "mililitros",
+    "conversionRate": 500
+  },
+  {
+    "id": "cm9cye6lh000cscuo6g054goj",
+    "name": "Diversos",
+    "code": "div",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000dscuoe255ba6d",
+    "name": "Galão",
+    "code": "gl",
+    "baseUnit": "litros",
+    "conversionRate": 3.785
+  },
+  {
+    "id": "cm9cye6lh000escuo0xgqdlxw",
+    "name": "Jogo",
+    "code": "jg",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000fscuoauzsfn5f",
+    "name": "Conjunto",
+    "code": "conj",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000gscuo3p2jbciv",
+    "name": "Dose",
+    "code": "dose",
+    "baseUnit": "mililitros",
+    "conversionRate": 10
+  },
+  {
+    "id": "cm9cye6lh000hscuo54g5bvbq",
+    "name": "Quilowatt",
+    "code": "kwa",
+    "baseUnit": "watts",
+    "conversionRate": 1000
+  },
+  {
+    "id": "cm9cye6lh000iscuo4saq285n",
+    "name": "Salário",
+    "code": "sal",
+    "baseUnit": "reais",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000jscuo41er5dqt",
+    "name": "Par",
+    "code": "par",
+    "baseUnit": "unidade",
+    "conversionRate": 2
+  },
+  {
+    "id": "cm9cye6lh000kscuo2lag6t4w",
+    "name": "Metros",
+    "code": "mts",
+    "baseUnit": "centímetros",
+    "conversionRate": 100
+  },
+  {
+    "id": "cm9cye6lh000lscuo1wiw5npf",
+    "name": "Visita",
+    "code": "vis",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000mscuo3emj98af",
+    "name": "Unidade",
+    "code": "uni",
+    "baseUnit": "unidade",
+    "conversionRate": 1
+  },
+  {
+    "id": "cm9cye6lh000nscuobws13rml",
+    "name": "Horas",
+    "code": "hrs",
+    "baseUnit": "minutos",
+    "conversionRate": 60
+  }
+]

@@ -2,15 +2,9 @@ import { commonExceptions } from '@/mappings/common-exceptions.mapping';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class IFarmsFindByIdDTO {
-  @ApiProperty()
-  @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
-  id: string;
-}
-
-export class IFarmsSwitchDTO {
+export class IFarmsSwitchBodyDTO {
   @ApiProperty()
   @IsNotEmpty({ message: commonExceptions.param.isNotEmpty })
   @IsString()
-  id: string;
+  refreshToken: string;
 }

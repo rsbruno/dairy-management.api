@@ -29,7 +29,7 @@ export class AuthController {
     responseModel: IAuthAccessGetDTO,
     isPublic: true,
   })
-  async signin(@Body() { username, password }: IAuthSigninBodyDTO) {
-    return this.authService.signinWithKeycloakCredentials(username, password);
+  async signin(@Body() authSigninBodyDTO: IAuthSigninBodyDTO) {
+    return this.authService.signinWithKeycloakCredentials(authSigninBodyDTO);
   }
 }
