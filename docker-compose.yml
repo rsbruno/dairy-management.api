@@ -20,9 +20,9 @@ services:
     container_name: milk-management-keycloak
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://REDACTED_HOST/milk-management-db?sslmode=require
-      KC_DB_USERNAME: REDACTED_USER
-      KC_DB_PASSWORD: REDACTED
+      KC_DB_URL: jdbc:postgresql://postgres:5432/milk-management-db
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
