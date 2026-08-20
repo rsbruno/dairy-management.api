@@ -35,19 +35,7 @@ Backend construído em [NestJS](https://nestjs.com/) + [Prisma](https://www.pris
 
 ## Como rodar
 
-### 1. Suba a infraestrutura (Postgres + Keycloak)
-
-```bash
-docker compose up -d
-```
-
-### 2. Instale as dependências
-
-```bash
-pnpm install
-```
-
-### 3. Configure as variáveis de ambiente
+### 1. Configure as variáveis de ambiente
 
 Copie `.env.example` para `.env` e preencha os valores:
 
@@ -64,6 +52,25 @@ cp .env.example .env
 | `KEYCLOAK_CLIENT_ID` | Client ID da aplicação no Keycloak |
 | `KEYCLOAK_CLIENT_SECRET` | Client Secret da aplicação no Keycloak |
 | `KEYCLOAK_PUBLIC_KEY` | Chave pública do realm (validação do JWT) |
+| `POSTGRES_USER` | Usuário do Postgres criado pelo `docker-compose.yml` |
+| `POSTGRES_PASSWORD` | Senha do Postgres criado pelo `docker-compose.yml` |
+| `POSTGRES_DB` | Nome do banco criado pelo `docker-compose.yml` |
+| `KEYCLOAK_ADMIN` | Usuário admin do Keycloak (container) |
+| `KEYCLOAK_ADMIN_PASSWORD` | Senha admin do Keycloak (container) |
+
+O `docker-compose.yml` lê essas variáveis do `.env` — nenhuma credencial fica hardcoded no arquivo.
+
+### 2. Suba a infraestrutura (Postgres + Keycloak)
+
+```bash
+docker compose up -d
+```
+
+### 3. Instale as dependências
+
+```bash
+pnpm install
+```
 
 ### 4. Rode as migrations e o seed
 
