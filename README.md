@@ -5,16 +5,18 @@
 <h1 align="center">Dairy Management API</h1>
 
 <p align="center">
-  API REST para gestão de produção leiteira (estoque, financeiro, administrativo e identidade/autenticação).<br/>
+  API REST para gerenciamento de entradas e saídas de fazendas leiteiras (estoque, financeiro, administrativo e identidade/autenticação).<br/>
   Projeto de <strong>TCC</strong> (Trabalho de Conclusão de Curso).
 </p>
 
 ## Sobre o projeto
 
-Backend construído em [NestJS](https://nestjs.com/) + [Prisma](https://www.prisma.io/) (PostgreSQL), com autenticação/autorização via [Keycloak](https://www.keycloak.org/). Organiza o domínio da aplicação em módulos:
+Projeto de TCC que resolve o controle de entradas e saídas de fazendas leiteiras: movimentação de estoque (produtos), transações financeiras e saldo, gestão de fazendas e pessoas, com autenticação/autorização via Keycloak.
 
-- **Stock** — produtos
-- **Finance** — transações e saldo
+Backend construído em [NestJS](https://nestjs.com/) + [Prisma](https://www.prisma.io/) (PostgreSQL). Organiza o domínio da aplicação em módulos:
+
+- **Stock** — entradas/saídas de produtos (estoque)
+- **Finance** — transações e saldo financeiro
 - **Administrative** — fazendas (farms)
 - **Identity** — pessoas e autenticação
 - **Parameters** — centro de custo, tipos de transação, unidades de medida
